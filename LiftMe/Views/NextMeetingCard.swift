@@ -60,6 +60,17 @@ struct NextMeetingCard: View {
                 }
 
                 Spacer()
+
+                if let link = meeting.meetingLink {
+                    Button {
+                        link.launch()
+                    } label: {
+                        Label("Join \(link.provider.rawValue)", systemImage: link.provider.iconName)
+                            .font(.subheadline)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.small)
+                }
             }
         }
         .padding(12)

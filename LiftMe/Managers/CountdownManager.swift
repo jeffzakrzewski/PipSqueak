@@ -8,6 +8,7 @@ final class CountdownManager {
     var remainingSeconds: Int = 0
     var isCountingDown: Bool = false
     var meetingState: MeetingState = .idle
+    var compact: Bool = false
 
     private var timer: Timer?
     private var wakeObserver: (any NSObjectProtocol)?
@@ -32,13 +33,13 @@ final class CountdownManager {
         case .idle:
             return ""
         case .upcoming(let meeting):
-            let remaining = Int(meeting.startDate.timeIntervalSinceNow)
-            if remaining <= 0 {
-                return "In: \(meeting.truncatedTitle)"
+            if remainingSeconds <= 0 {
+                return compact ? "Now" : "In: \(meeting.truncatedTitle)"
             }
-            return "\(meeting.truncatedTitle) in \(formatTime(remaining))"
+            let time = formatTime(remainingSeconds)
+            return compact ? "in \(time)" : "\(meeting.truncatedTitle) in \(time)"
         case .inMeeting(let meeting):
-            return "In: \(meeting.truncatedTitle)"
+            return compact ? "In mtg" : "In: \(meeting.truncatedTitle)"
         }
     }
 
@@ -46,9 +47,8 @@ final class CountdownManager {
         switch meetingState {
         case .idle:
             return "calendar"
-        case .upcoming(let meeting):
-            let remaining = meeting.startDate.timeIntervalSinceNow
-            if remaining <= 60 {
+        case .upcoming:
+            if remainingSeconds <= 60 {
                 return "speaker.wave.3.fill"
             }
             return "calendar.badge.clock"
@@ -136,7 +136,7 @@ final class CountdownManager {
     }
 
     private func formatTime(_ totalSeconds: Int) -> String {
-        if totalSeconds <= 0 { return "0:00" }
+        if totalSeconds <= 0 { return "0s" }
 
         let hours = totalSeconds / 3600
         let minutes = (totalSeconds % 3600) / 60
@@ -149,7 +149,11 @@ final class CountdownManager {
             return "\(hours)h \(minutes)m"
         }
 
-        return String(format: "%d:%02d", minutes, seconds)
+        if minutes > 0 {
+            return "\(minutes)m"
+        }
+
+        return "\(seconds)s"
     }
 
     private func observeWake() {

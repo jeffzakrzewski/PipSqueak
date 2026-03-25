@@ -8,40 +8,61 @@ final class AppState {
     let countdownManager = CountdownManager()
     let audioManager = AudioManager()
 
-    @ObservationIgnored
-    @AppStorage("selectedCalendarIDs") private var selectedCalendarIDsData: Data = Data()
+    // Observable properties that sync to UserDefaults
+    var leadInDuration: Double {
+        didSet { UserDefaults.standard.set(leadInDuration, forKey: "leadInDuration") }
+    }
 
-    @ObservationIgnored
-    @AppStorage("leadInDuration") var leadInDuration: Double = 30
+    var audioVolume: Double {
+        didSet {
+            UserDefaults.standard.set(audioVolume, forKey: "audioVolume")
+            audioManager.updateVolume(Float(audioVolume))
+        }
+    }
 
-    @ObservationIgnored
-    @AppStorage("audioVolume") var audioVolume: Double = 0.7
+    var customAudioBookmarkData: Data {
+        didSet { UserDefaults.standard.set(customAudioBookmarkData, forKey: "customAudioBookmark") }
+    }
 
-    @ObservationIgnored
-    @AppStorage("customAudioBookmark") var customAudioBookmarkData: Data = Data()
+    var launchAtLogin: Bool {
+        didSet { UserDefaults.standard.set(launchAtLogin, forKey: "launchAtLogin") }
+    }
 
-    @ObservationIgnored
-    @AppStorage("launchAtLogin") var launchAtLogin: Bool = false
+    var compactMenuBar: Bool {
+        didSet { UserDefaults.standard.set(compactMenuBar, forKey: "compactMenuBar") }
+    }
 
     var selectedCalendarIDs: Set<String> {
-        get {
-            guard !selectedCalendarIDsData.isEmpty,
-                  let ids = try? JSONDecoder().decode(Set<String>.self, from: selectedCalendarIDsData)
-            else { return [] }
-            return ids
-        }
-        set {
-            selectedCalendarIDsData = (try? JSONEncoder().encode(newValue)) ?? Data()
+        didSet {
+            let data = (try? JSONEncoder().encode(selectedCalendarIDs)) ?? Data()
+            UserDefaults.standard.set(data, forKey: "selectedCalendarIDs")
         }
     }
 
     private var refreshTimer: Timer?
 
     init() {
+        // Load persisted values
+        let defaults = UserDefaults.standard
+        self.leadInDuration = defaults.object(forKey: "leadInDuration") as? Double ?? 30
+        self.audioVolume = defaults.object(forKey: "audioVolume") as? Double ?? 0.7
+        self.customAudioBookmarkData = defaults.data(forKey: "customAudioBookmark") ?? Data()
+        self.launchAtLogin = defaults.bool(forKey: "launchAtLogin")
+        self.compactMenuBar = defaults.bool(forKey: "compactMenuBar")
+
+        if let calData = defaults.data(forKey: "selectedCalendarIDs"),
+           let ids = try? JSONDecoder().decode(Set<String>.self, from: calData) {
+            self.selectedCalendarIDs = ids
+        } else {
+            self.selectedCalendarIDs = []
+        }
+
         audioManager.volume = Float(audioVolume)
 
         if !customAudioBookmarkData.isEmpty {
             audioManager.loadCustomAudio(bookmark: customAudioBookmarkData)
+        } else {
+            audioManager.loadBundledAudio()
         }
     }
 
@@ -65,13 +86,11 @@ final class AppState {
     }
 
     func toggleCalendar(_ calendarID: String) {
-        var ids = selectedCalendarIDs
-        if ids.contains(calendarID) {
-            ids.remove(calendarID)
+        if selectedCalendarIDs.contains(calendarID) {
+            selectedCalendarIDs.remove(calendarID)
         } else {
-            ids.insert(calendarID)
+            selectedCalendarIDs.insert(calendarID)
         }
-        selectedCalendarIDs = ids
         refreshEvents()
     }
 
@@ -81,7 +100,8 @@ final class AppState {
     }
 
     var menuBarTitle: String {
-        countdownManager.menuBarTitle
+        countdownManager.compact = compactMenuBar
+        return countdownManager.menuBarTitle
     }
 
     var menuBarIcon: String {

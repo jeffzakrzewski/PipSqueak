@@ -21,8 +21,8 @@ targets:
       - path: LiftMe
         excludes:
           - Resources
-    resources:
       - path: LiftMe/Resources
+        type: resource
     info:
       path: LiftMe/Info.plist
     entitlements:

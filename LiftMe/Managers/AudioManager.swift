@@ -9,6 +9,7 @@ final class AudioManager {
     var isPlaying: Bool = false
     var volume: Float = 0.7
     var isAudioLoaded: Bool = false
+    var audioDuration: TimeInterval = 0
 
     private var player: AVAudioPlayer?
     private var customAudioBookmark: Data?
@@ -125,16 +126,10 @@ final class AudioManager {
 
     func previewAudio() {
         guard let player = player else { return }
-        player.currentTime = max(0, pipsOffset - 5)
+        player.currentTime = 0
         player.volume = volume
         player.play()
         isPlaying = true
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [weak self] in
-            Task { @MainActor in
-                self?.cancelPlayback()
-            }
-        }
     }
 
     private func loadAudio(from url: URL) {
@@ -142,8 +137,10 @@ final class AudioManager {
             player = try AVAudioPlayer(contentsOf: url)
             player?.prepareToPlay()
             isAudioLoaded = true
+            audioDuration = player?.duration ?? 0
         } catch {
             isAudioLoaded = false
+            audioDuration = 0
             player = nil
         }
     }

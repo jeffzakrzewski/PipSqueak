@@ -2,6 +2,8 @@ import SwiftUI
 
 struct PopoverView: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         VStack(spacing: 0) {
@@ -47,7 +49,7 @@ struct PopoverView: View {
             .controlSize(.regular)
 
             Button("Open Settings...") {
-                openSettings()
+                showSettings()
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
@@ -67,6 +69,12 @@ struct PopoverView: View {
                 UpcomingMeetingsList(
                     events: Array(appState.calendarManager.upcomingEvents.prefix(5)),
                     currentMeetingID: appState.countdownManager.currentMeeting?.id
+                )
+            }
+
+            if !appState.calendarManager.recentEvents.isEmpty {
+                RecentMeetingsList(
+                    events: Array(appState.calendarManager.recentEvents.prefix(3))
                 )
             }
         }
@@ -98,7 +106,7 @@ struct PopoverView: View {
             Spacer()
 
             Button("Settings...") {
-                openSettings()
+                showSettings()
             }
             .buttonStyle(.borderless)
 
@@ -114,30 +122,9 @@ struct PopoverView: View {
         .padding(.vertical, 4)
     }
 
-    private func openSettings() {
-        NSApp.setActivationPolicy(.regular)
+    private func showSettings() {
+        dismiss()
         NSApp.activate(ignoringOtherApps: true)
-
-        if #available(macOS 14, *) {
-            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-        } else {
-            NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
-        }
-
-        // Restore accessory policy when settings close
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            if let settingsWindow = NSApp.windows.first(where: {
-                $0.identifier?.rawValue.contains("Settings") ?? false ||
-                $0.identifier?.rawValue.contains("Preferences") ?? false
-            }) {
-                NotificationCenter.default.addObserver(
-                    forName: NSWindow.willCloseNotification,
-                    object: settingsWindow,
-                    queue: .main
-                ) { _ in
-                    NSApp.setActivationPolicy(.accessory)
-                }
-            }
-        }
+        openWindow(id: "settings")
     }
 }

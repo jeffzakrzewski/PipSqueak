@@ -14,9 +14,11 @@ struct LiftMeApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        Settings {
+        Window("LiftMe Settings", id: "settings") {
             SettingsView()
                 .environment(appState)
         }
+        .windowResizability(.contentSize)
+        .defaultPosition(.center)
     }
 }

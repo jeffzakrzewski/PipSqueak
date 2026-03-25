@@ -14,7 +14,9 @@
 		2E3266538587838FB0F66108 /* UpcomingMeetingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */; };
 		3E7DDE849BAF938C2446EA51 /* CountdownManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */; };
 		520DE89D88E68137C2415925 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D269FFE32D873C2EE320B59 /* PopoverView.swift */; };
+		5450E668241A23486344F1B6 /* 30second.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6776EA7D62990E00AD80365C /* 30second.mp3 */; };
 		5804977A99219FBB0E7C8EB7 /* NextMeetingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F26562EE0B2CE0921C6874 /* NextMeetingCard.swift */; };
+		5E0E1D0F01DF18F10BAC7D62 /* RecentMeetingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59F1A05389070D934DD317C /* RecentMeetingsList.swift */; };
 		698FDFAE1B4B0D9D45210BA5 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A599575874DD1C2F3A41E800 /* AudioManager.swift */; };
 		72B498BA4FC41D10AD56389D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20003417553CE530E2E893C /* GeneralSettingsView.swift */; };
 		75560D7C4535BC72870338A4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45118B30515B5790027BBE55 /* AppState.swift */; };
@@ -35,6 +37,7 @@
 		427F9413882F4AB54DABACDD /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		45118B30515B5790027BBE55 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		51627A9F83D3706942E33EA7 /* MeetingEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingEvent.swift; sourceTree = "<group>"; };
+		6776EA7D62990E00AD80365C /* 30second.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 30second.mp3; sourceTree = "<group>"; };
 		6D021FE468EA1A6D719E8D9A /* LiftMeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftMeApp.swift; sourceTree = "<group>"; };
 		7BBB19C02612AEAC8EB30394 /* MenuBarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLabel.swift; sourceTree = "<group>"; };
 		9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionDeniedView.swift; sourceTree = "<group>"; };
@@ -44,6 +47,7 @@
 		AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsView.swift; sourceTree = "<group>"; };
 		B20003417553CE530E2E893C /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownManager.swift; sourceTree = "<group>"; };
+		E59F1A05389070D934DD317C /* RecentMeetingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMeetingsList.swift; sourceTree = "<group>"; };
 		F89E8C630FE9CEB6941E4BC0 /* LiftMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiftMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -52,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				E549FDD3B456E68AFDDDBFC6 /* LiftMe */,
+				819F347EB22C9B6D41F5D2B9 /* Resources */,
 				37E886C57EE9C4FFBF431241 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -70,6 +75,15 @@
 				51627A9F83D3706942E33EA7 /* MeetingEvent.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		819F347EB22C9B6D41F5D2B9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6776EA7D62990E00AD80365C /* 30second.mp3 */,
+			);
+			name = Resources;
+			path = LiftMe/Resources;
 			sourceTree = "<group>";
 		};
 		85643571F182169BC303A89C /* Settings */ = {
@@ -91,6 +105,7 @@
 				41F26562EE0B2CE0921C6874 /* NextMeetingCard.swift */,
 				9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */,
 				2D269FFE32D873C2EE320B59 /* PopoverView.swift */,
+				E59F1A05389070D934DD317C /* RecentMeetingsList.swift */,
 				3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */,
 				85643571F182169BC303A89C /* Settings */,
 			);
@@ -129,6 +144,7 @@
 			buildConfigurationList = D04A34AF364AC5DEC9550A87 /* Build configuration list for PBXNativeTarget "LiftMe" */;
 			buildPhases = (
 				1A5E6F4BF9ACA01746FE13F1 /* Sources */,
+				3FFB326F6DEC68D35F136325 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -171,6 +187,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		3FFB326F6DEC68D35F136325 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5450E668241A23486344F1B6 /* 30second.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1A5E6F4BF9ACA01746FE13F1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -189,6 +216,7 @@
 				5804977A99219FBB0E7C8EB7 /* NextMeetingCard.swift in Sources */,
 				07C8C9E022A95E1E8A493F8D /* PermissionDeniedView.swift in Sources */,
 				520DE89D88E68137C2415925 /* PopoverView.swift in Sources */,
+				5E0E1D0F01DF18F10BAC7D62 /* RecentMeetingsList.swift in Sources */,
 				84C4B6816F651D50147CFCEF /* SettingsView.swift in Sources */,
 				0A80EACF691BAECE9D506191 /* TimerSettingsView.swift in Sources */,
 				2E3266538587838FB0F66108 /* UpcomingMeetingsList.swift in Sources */,

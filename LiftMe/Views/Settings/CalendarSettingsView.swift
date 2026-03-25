@@ -30,7 +30,9 @@ struct CalendarSettingsView: View {
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .frame(maxHeight: .infinity)
 
                 HStack {
                     Button("Select All") {
@@ -43,22 +45,27 @@ struct CalendarSettingsView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
     }
 
+    @ViewBuilder
     private func calendarRow(_ calendar: EKCalendar) -> some View {
-        HStack(spacing: 8) {
-            let isSelected = appState.selectedCalendarIDs.contains(calendar.calendarIdentifier)
-            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                .foregroundStyle(isSelected ? Color(cgColor: calendar.cgColor) ?? .blue : .secondary)
-
-            Text(calendar.title)
-                .font(.body)
-        }
-        .contentShape(Rectangle())
-        .onTapGesture {
+        let isSelected = appState.selectedCalendarIDs.contains(calendar.calendarIdentifier)
+        Button {
             appState.toggleCalendar(calendar.calendarIdentifier)
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .foregroundStyle(isSelected ? Color(cgColor: calendar.cgColor) ?? .blue : .secondary)
+
+                Text(calendar.title)
+                    .font(.body)
+                    .foregroundStyle(.primary)
+            }
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .padding(.vertical, 2)
         .padding(.leading, 8)
     }

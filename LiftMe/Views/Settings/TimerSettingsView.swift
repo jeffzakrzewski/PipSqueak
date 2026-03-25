@@ -3,13 +3,9 @@ import SwiftUI
 struct TimerSettingsView: View {
     @Environment(AppState.self) private var appState
 
-    private let durations: [(label: String, value: Double)] = [
-        ("15 seconds", 15),
-        ("30 seconds", 30),
-        ("60 seconds", 60),
-    ]
-
     var body: some View {
+        @Bindable var appState = appState
+
         VStack(alignment: .leading, spacing: 16) {
             Text("Countdown Settings")
                 .font(.headline)
@@ -18,13 +14,10 @@ struct TimerSettingsView: View {
                 Text("Start audio countdown before meeting:")
                     .font(.subheadline)
 
-                Picker("Lead-in duration", selection: Binding(
-                    get: { appState.leadInDuration },
-                    set: { appState.leadInDuration = $0 }
-                )) {
-                    ForEach(durations, id: \.value) { duration in
-                        Text(duration.label).tag(duration.value)
-                    }
+                Picker("Lead-in duration", selection: $appState.leadInDuration) {
+                    Text("15 seconds").tag(15.0)
+                    Text("30 seconds").tag(30.0)
+                    Text("60 seconds").tag(60.0)
                 }
                 .pickerStyle(.radioGroup)
 

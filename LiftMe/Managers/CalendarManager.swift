@@ -9,6 +9,7 @@ final class CalendarManager {
     var authorizationStatus: EKAuthorizationStatus = EKEventStore.authorizationStatus(for: .event)
     var allCalendars: [EKCalendar] = []
     var upcomingEvents: [MeetingEvent] = []
+    var recentEvents: [MeetingEvent] = []
 
     private var changeObserver: (any NSObjectProtocol)?
 
@@ -34,19 +35,33 @@ final class CalendarManager {
         let calendars = allCalendars.filter { selectedCalendarIDs.contains($0.calendarIdentifier) }
         guard !calendars.isEmpty else {
             upcomingEvents = []
+            recentEvents = []
             return
         }
 
         let now = Date()
+        let startOfDay = Calendar.current.startOfDay(for: now)
         let end = Calendar.current.date(byAdding: .day, value: 1, to: now)!
-        let predicate = eventStore.predicateForEvents(withStart: now, end: end, calendars: calendars)
 
-        let ekEvents = eventStore.events(matching: predicate)
+        // Fetch all of today's events
+        let predicate = eventStore.predicateForEvents(withStart: startOfDay, end: end, calendars: calendars)
+
+        let allEvents = eventStore.events(matching: predicate)
             .filter { !$0.isAllDay }
             .filter { !self.isDeclined($0) }
-            .sorted { $0.startDate < $1.startDate }
 
-        upcomingEvents = ekEvents.map { MeetingEvent(from: $0) }
+        // Upcoming: haven't ended yet (includes currently active)
+        upcomingEvents = allEvents
+            .filter { $0.endDate > now }
+            .sorted { $0.startDate < $1.startDate }
+            .map { MeetingEvent(from: $0) }
+
+        // Recent: already ended today, only those with meeting links (for joining late)
+        recentEvents = allEvents
+            .filter { $0.endDate <= now }
+            .sorted { $0.startDate > $1.startDate } // most recent first
+            .map { MeetingEvent(from: $0) }
+            .filter { $0.meetingLink != nil }
     }
 
     func startObservingChanges() {

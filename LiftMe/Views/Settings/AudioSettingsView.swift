@@ -4,51 +4,44 @@ struct AudioSettingsView: View {
     @Environment(AppState.self) private var appState
 
     var body: some View {
+        @Bindable var appState = appState
+
         VStack(alignment: .leading, spacing: 16) {
-            Text("Audio Settings")
-                .font(.headline)
-
-            // Volume
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Volume")
-                    .font(.subheadline)
-                HStack {
-                    Image(systemName: "speaker.fill")
-                        .foregroundStyle(.secondary)
-                    Slider(
-                        value: Binding(
-                            get: { appState.audioVolume },
-                            set: {
-                                appState.audioVolume = $0
-                                appState.audioManager.updateVolume(Float($0))
-                            }
-                        ),
-                        in: 0...1
-                    )
-                    Image(systemName: "speaker.wave.3.fill")
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Divider()
-
-            // Custom audio
+            // Countdown Sound
             VStack(alignment: .leading, spacing: 8) {
                 Text("Countdown Sound")
-                    .font(.subheadline)
+                    .font(.headline)
 
                 HStack {
                     if appState.customAudioBookmarkData.isEmpty {
-                        Text("Using default sound")
-                            .font(.caption)
+                        Label("Using default sound", systemImage: "music.note")
+                            .font(.subheadline)
                             .foregroundStyle(.secondary)
                     } else {
-                        Text("Custom sound loaded")
-                            .font(.caption)
+                        Label("Custom sound loaded", systemImage: "music.note")
+                            .font(.subheadline)
                             .foregroundStyle(.green)
                     }
 
                     Spacer()
+
+                    if appState.audioManager.isAudioLoaded {
+                        Text(formatDuration(appState.audioManager.audioDuration))
+                            .font(.subheadline)
+                            .monospacedDigit()
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                HStack {
+                    Button(appState.audioManager.isPlaying ? "Stop" : "Preview") {
+                        if appState.audioManager.isPlaying {
+                            appState.audioManager.cancelPlayback()
+                        } else {
+                            appState.audioManager.previewAudio()
+                        }
+                    }
+                    .disabled(!appState.audioManager.isAudioLoaded)
 
                     Button("Choose File...") {
                         if let bookmark = appState.audioManager.selectCustomAudio() {
@@ -64,14 +57,59 @@ struct AudioSettingsView: View {
                     }
                 }
 
-                Button("Preview Sound") {
-                    appState.audioManager.previewAudio()
+                if !appState.audioManager.isAudioLoaded {
+                    Text("No audio file loaded")
+                        .font(.caption)
+                        .foregroundStyle(.red)
                 }
-                .disabled(!appState.audioManager.isAudioLoaded)
+            }
+
+            Divider()
+
+            // Lead-in timing
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Lead-in Timing")
+                    .font(.headline)
+
+                Text("How long before the meeting should the countdown start?")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                Picker("Lead-in duration", selection: $appState.leadInDuration) {
+                    Text("15 seconds").tag(15.0)
+                    Text("30 seconds").tag(30.0)
+                    Text("60 seconds").tag(60.0)
+                }
+                .pickerStyle(.radioGroup)
+
+                Text("The audio is scheduled so the pips land exactly at meeting start time. If the lead-in is shorter than the audio file, playback starts partway through.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Divider()
+
+            // Volume
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Volume")
+                    .font(.headline)
+                HStack {
+                    Image(systemName: "speaker.fill")
+                        .foregroundStyle(.secondary)
+                    Slider(value: $appState.audioVolume, in: 0...1)
+                    Image(systemName: "speaker.wave.3.fill")
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Spacer()
         }
         .padding()
+    }
+
+    private func formatDuration(_ seconds: TimeInterval) -> String {
+        let mins = Int(seconds) / 60
+        let secs = Int(seconds) % 60
+        return String(format: "%d:%02d", mins, secs)
     }
 }
