@@ -1,0 +1,384 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0554EF8B8A25BDB16B224C38 /* MenuBarLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBB19C02612AEAC8EB30394 /* MenuBarLabel.swift */; };
+		07C8C9E022A95E1E8A493F8D /* PermissionDeniedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */; };
+		0A80EACF691BAECE9D506191 /* TimerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */; };
+		1A41045D58F481A50104B759 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427F9413882F4AB54DABACDD /* CalendarManager.swift */; };
+		2E3266538587838FB0F66108 /* UpcomingMeetingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */; };
+		3E7DDE849BAF938C2446EA51 /* CountdownManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */; };
+		520DE89D88E68137C2415925 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D269FFE32D873C2EE320B59 /* PopoverView.swift */; };
+		5804977A99219FBB0E7C8EB7 /* NextMeetingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F26562EE0B2CE0921C6874 /* NextMeetingCard.swift */; };
+		698FDFAE1B4B0D9D45210BA5 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A599575874DD1C2F3A41E800 /* AudioManager.swift */; };
+		72B498BA4FC41D10AD56389D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20003417553CE530E2E893C /* GeneralSettingsView.swift */; };
+		75560D7C4535BC72870338A4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45118B30515B5790027BBE55 /* AppState.swift */; };
+		77FDBCB4FD25402E5FE42B79 /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */; };
+		82CE4B3AC51867CCBAD08D6A /* LiftMeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D021FE468EA1A6D719E8D9A /* LiftMeApp.swift */; };
+		84C4B6816F651D50147CFCEF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F261C5EDE09B4A1FC75210B /* SettingsView.swift */; };
+		C5DC1BF7300996EEF2F7DE2F /* MeetingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51627A9F83D3706942E33EA7 /* MeetingEvent.swift */; };
+		D9E08DEA2077103E1AD5E1AD /* AudioSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6CE62B9F468412786574C /* AudioSettingsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		04A6CE62B9F468412786574C /* AudioSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSettingsView.swift; sourceTree = "<group>"; };
+		1F261C5EDE09B4A1FC75210B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2B52CD4BE2420F309445FD97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2D269FFE32D873C2EE320B59 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
+		3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingMeetingsList.swift; sourceTree = "<group>"; };
+		41F26562EE0B2CE0921C6874 /* NextMeetingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextMeetingCard.swift; sourceTree = "<group>"; };
+		427F9413882F4AB54DABACDD /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
+		45118B30515B5790027BBE55 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		51627A9F83D3706942E33EA7 /* MeetingEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingEvent.swift; sourceTree = "<group>"; };
+		6D021FE468EA1A6D719E8D9A /* LiftMeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftMeApp.swift; sourceTree = "<group>"; };
+		7BBB19C02612AEAC8EB30394 /* MenuBarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLabel.swift; sourceTree = "<group>"; };
+		9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionDeniedView.swift; sourceTree = "<group>"; };
+		A1160FDC89EB534F90BF9282 /* LiftMe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LiftMe.entitlements; sourceTree = "<group>"; };
+		A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
+		A599575874DD1C2F3A41E800 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsView.swift; sourceTree = "<group>"; };
+		B20003417553CE530E2E893C /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownManager.swift; sourceTree = "<group>"; };
+		F89E8C630FE9CEB6941E4BC0 /* LiftMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiftMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		244D7F79B879D94A7B9773B6 = {
+			isa = PBXGroup;
+			children = (
+				E549FDD3B456E68AFDDDBFC6 /* LiftMe */,
+				37E886C57EE9C4FFBF431241 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		37E886C57EE9C4FFBF431241 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F89E8C630FE9CEB6941E4BC0 /* LiftMe.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3954F4638B9B1BD4D8B1D755 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				51627A9F83D3706942E33EA7 /* MeetingEvent.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		85643571F182169BC303A89C /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				04A6CE62B9F468412786574C /* AudioSettingsView.swift */,
+				A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */,
+				B20003417553CE530E2E893C /* GeneralSettingsView.swift */,
+				1F261C5EDE09B4A1FC75210B /* SettingsView.swift */,
+				AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		91FD3F97FC5A82CCE127F0D8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7BBB19C02612AEAC8EB30394 /* MenuBarLabel.swift */,
+				41F26562EE0B2CE0921C6874 /* NextMeetingCard.swift */,
+				9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */,
+				2D269FFE32D873C2EE320B59 /* PopoverView.swift */,
+				3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */,
+				85643571F182169BC303A89C /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E4656DBF3A21347ED3ECE882 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				45118B30515B5790027BBE55 /* AppState.swift */,
+				A599575874DD1C2F3A41E800 /* AudioManager.swift */,
+				427F9413882F4AB54DABACDD /* CalendarManager.swift */,
+				E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		E549FDD3B456E68AFDDDBFC6 /* LiftMe */ = {
+			isa = PBXGroup;
+			children = (
+				2B52CD4BE2420F309445FD97 /* Info.plist */,
+				A1160FDC89EB534F90BF9282 /* LiftMe.entitlements */,
+				6D021FE468EA1A6D719E8D9A /* LiftMeApp.swift */,
+				E4656DBF3A21347ED3ECE882 /* Managers */,
+				3954F4638B9B1BD4D8B1D755 /* Models */,
+				91FD3F97FC5A82CCE127F0D8 /* Views */,
+			);
+			path = LiftMe;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FD4526D8604FD276C40E6410 /* LiftMe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D04A34AF364AC5DEC9550A87 /* Build configuration list for PBXNativeTarget "LiftMe" */;
+			buildPhases = (
+				1A5E6F4BF9ACA01746FE13F1 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LiftMe;
+			packageProductDependencies = (
+			);
+			productName = LiftMe;
+			productReference = F89E8C630FE9CEB6941E4BC0 /* LiftMe.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E75E4F753B11ED1155136B63 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 5725F03E449673F243AB7D46 /* Build configuration list for PBXProject "LiftMe" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 244D7F79B879D94A7B9773B6;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 37E886C57EE9C4FFBF431241 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FD4526D8604FD276C40E6410 /* LiftMe */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A5E6F4BF9ACA01746FE13F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75560D7C4535BC72870338A4 /* AppState.swift in Sources */,
+				698FDFAE1B4B0D9D45210BA5 /* AudioManager.swift in Sources */,
+				D9E08DEA2077103E1AD5E1AD /* AudioSettingsView.swift in Sources */,
+				1A41045D58F481A50104B759 /* CalendarManager.swift in Sources */,
+				77FDBCB4FD25402E5FE42B79 /* CalendarSettingsView.swift in Sources */,
+				3E7DDE849BAF938C2446EA51 /* CountdownManager.swift in Sources */,
+				72B498BA4FC41D10AD56389D /* GeneralSettingsView.swift in Sources */,
+				82CE4B3AC51867CCBAD08D6A /* LiftMeApp.swift in Sources */,
+				C5DC1BF7300996EEF2F7DE2F /* MeetingEvent.swift in Sources */,
+				0554EF8B8A25BDB16B224C38 /* MenuBarLabel.swift in Sources */,
+				5804977A99219FBB0E7C8EB7 /* NextMeetingCard.swift in Sources */,
+				07C8C9E022A95E1E8A493F8D /* PermissionDeniedView.swift in Sources */,
+				520DE89D88E68137C2415925 /* PopoverView.swift in Sources */,
+				84C4B6816F651D50147CFCEF /* SettingsView.swift in Sources */,
+				0A80EACF691BAECE9D506191 /* TimerSettingsView.swift in Sources */,
+				2E3266538587838FB0F66108 /* UpcomingMeetingsList.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5E33CA42C9BC7BAC97FB163C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		78AAA3B3F9806599A43FD41E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LiftMe/LiftMe.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LiftMe/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.liftme.LiftMe;
+				PRODUCT_NAME = LiftMe;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		DDA22762FE688D7E07414FEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		F9BBD876B83F5474C7DDE708 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LiftMe/LiftMe.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LiftMe/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.liftme.LiftMe;
+				PRODUCT_NAME = LiftMe;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5725F03E449673F243AB7D46 /* Build configuration list for PBXProject "LiftMe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E33CA42C9BC7BAC97FB163C /* Debug */,
+				DDA22762FE688D7E07414FEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D04A34AF364AC5DEC9550A87 /* Build configuration list for PBXNativeTarget "LiftMe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F9BBD876B83F5474C7DDE708 /* Debug */,
+				78AAA3B3F9806599A43FD41E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E75E4F753B11ED1155136B63 /* Project object */;
+}

@@ -1,0 +1,38 @@
+name: LiftMe
+options:
+  bundleIdPrefix: com.liftme
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  minimumXcodeGenVersion: "2.40.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    ENABLE_USER_SCRIPT_SANDBOXING: "YES"
+    SWIFT_STRICT_CONCURRENCY: "complete"
+
+targets:
+  LiftMe:
+    type: application
+    platform: macOS
+    sources:
+      - path: LiftMe
+        excludes:
+          - Resources
+    resources:
+      - path: LiftMe/Resources
+    info:
+      path: LiftMe/Info.plist
+    entitlements:
+      path: LiftMe/LiftMe.entitlements
+    settings:
+      base:
+        CODE_SIGN_ENTITLEMENTS: LiftMe/LiftMe.entitlements
+        INFOPLIST_FILE: LiftMe/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.liftme.LiftMe
+        PRODUCT_NAME: LiftMe
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: "NO"
+        COMBINE_HIDPI_IMAGES: "YES"
