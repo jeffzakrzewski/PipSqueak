@@ -29,7 +29,11 @@ final class CalendarManager {
         allCalendars = eventStore.calendars(for: .event)
     }
 
-    func fetchUpcomingEvents(selectedCalendarIDs: Set<String>) {
+    func fetchUpcomingEvents(
+        selectedCalendarIDs: Set<String>,
+        showEventsWithoutLinks: Bool = false,
+        onlyToday: Bool = false
+    ) {
         guard authorizationStatus == .fullAccess else { return }
 
         let calendars = allCalendars.filter { selectedCalendarIDs.contains($0.calendarIdentifier) }
@@ -41,27 +45,29 @@ final class CalendarManager {
 
         let now = Date()
         let startOfDay = Calendar.current.startOfDay(for: now)
-        let end = Calendar.current.date(byAdding: .day, value: 1, to: now)!
+        let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
+        let end = onlyToday ? endOfDay : Calendar.current.date(byAdding: .day, value: 7, to: now)!
 
-        // Fetch all of today's events
+        // Fetch events
         let predicate = eventStore.predicateForEvents(withStart: startOfDay, end: end, calendars: calendars)
 
         let allEvents = eventStore.events(matching: predicate)
             .filter { !$0.isAllDay }
             .filter { !self.isDeclined($0) }
 
+        let meetingEvents = allEvents.map { MeetingEvent(from: $0) }
+
         // Upcoming: haven't ended yet (includes currently active)
-        upcomingEvents = allEvents
+        upcomingEvents = meetingEvents
             .filter { $0.endDate > now }
+            .filter { showEventsWithoutLinks || $0.meetingLink != nil }
             .sorted { $0.startDate < $1.startDate }
-            .map { MeetingEvent(from: $0) }
 
         // Recent: already ended today, only those with meeting links (for joining late)
-        recentEvents = allEvents
-            .filter { $0.endDate <= now }
-            .sorted { $0.startDate > $1.startDate } // most recent first
-            .map { MeetingEvent(from: $0) }
+        recentEvents = meetingEvents
+            .filter { $0.endDate <= now && $0.startDate >= startOfDay }
             .filter { $0.meetingLink != nil }
+            .sorted { $0.startDate > $1.startDate }
     }
 
     func startObservingChanges() {

@@ -10,6 +10,7 @@
 		0554EF8B8A25BDB16B224C38 /* MenuBarLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBB19C02612AEAC8EB30394 /* MenuBarLabel.swift */; };
 		07C8C9E022A95E1E8A493F8D /* PermissionDeniedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */; };
 		0A80EACF691BAECE9D506191 /* TimerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */; };
+		0C4CB7728155351E2762DC33 /* BrowserProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D564CEC6603638DE3FD1954 /* BrowserProfileManager.swift */; };
 		1A41045D58F481A50104B759 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427F9413882F4AB54DABACDD /* CalendarManager.swift */; };
 		2E3266538587838FB0F66108 /* UpcomingMeetingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */; };
 		3E7DDE849BAF938C2446EA51 /* CountdownManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */; };
@@ -23,6 +24,7 @@
 		77FDBCB4FD25402E5FE42B79 /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */; };
 		82CE4B3AC51867CCBAD08D6A /* LiftMeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D021FE468EA1A6D719E8D9A /* LiftMeApp.swift */; };
 		84C4B6816F651D50147CFCEF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F261C5EDE09B4A1FC75210B /* SettingsView.swift */; };
+		C14565DA4325D852CC8F3A6C /* ProfileMappingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA66EB90B34A4FD2996D8DC /* ProfileMappingSettingsView.swift */; };
 		C5DC1BF7300996EEF2F7DE2F /* MeetingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51627A9F83D3706942E33EA7 /* MeetingEvent.swift */; };
 		D9E08DEA2077103E1AD5E1AD /* AudioSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6CE62B9F468412786574C /* AudioSettingsView.swift */; };
 /* End PBXBuildFile section */
@@ -33,6 +35,7 @@
 		2B52CD4BE2420F309445FD97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2D269FFE32D873C2EE320B59 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
 		3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingMeetingsList.swift; sourceTree = "<group>"; };
+		3D564CEC6603638DE3FD1954 /* BrowserProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserProfileManager.swift; sourceTree = "<group>"; };
 		41F26562EE0B2CE0921C6874 /* NextMeetingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextMeetingCard.swift; sourceTree = "<group>"; };
 		427F9413882F4AB54DABACDD /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		45118B30515B5790027BBE55 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -46,6 +49,7 @@
 		A599575874DD1C2F3A41E800 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsView.swift; sourceTree = "<group>"; };
 		B20003417553CE530E2E893C /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		DEA66EB90B34A4FD2996D8DC /* ProfileMappingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMappingSettingsView.swift; sourceTree = "<group>"; };
 		E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownManager.swift; sourceTree = "<group>"; };
 		E59F1A05389070D934DD317C /* RecentMeetingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMeetingsList.swift; sourceTree = "<group>"; };
 		F89E8C630FE9CEB6941E4BC0 /* LiftMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiftMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,6 +96,7 @@
 				04A6CE62B9F468412786574C /* AudioSettingsView.swift */,
 				A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */,
 				B20003417553CE530E2E893C /* GeneralSettingsView.swift */,
+				DEA66EB90B34A4FD2996D8DC /* ProfileMappingSettingsView.swift */,
 				1F261C5EDE09B4A1FC75210B /* SettingsView.swift */,
 				AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */,
 			);
@@ -117,6 +122,7 @@
 			children = (
 				45118B30515B5790027BBE55 /* AppState.swift */,
 				A599575874DD1C2F3A41E800 /* AudioManager.swift */,
+				3D564CEC6603638DE3FD1954 /* BrowserProfileManager.swift */,
 				427F9413882F4AB54DABACDD /* CalendarManager.swift */,
 				E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */,
 			);
@@ -206,6 +212,7 @@
 				75560D7C4535BC72870338A4 /* AppState.swift in Sources */,
 				698FDFAE1B4B0D9D45210BA5 /* AudioManager.swift in Sources */,
 				D9E08DEA2077103E1AD5E1AD /* AudioSettingsView.swift in Sources */,
+				0C4CB7728155351E2762DC33 /* BrowserProfileManager.swift in Sources */,
 				1A41045D58F481A50104B759 /* CalendarManager.swift in Sources */,
 				77FDBCB4FD25402E5FE42B79 /* CalendarSettingsView.swift in Sources */,
 				3E7DDE849BAF938C2446EA51 /* CountdownManager.swift in Sources */,
@@ -216,6 +223,7 @@
 				5804977A99219FBB0E7C8EB7 /* NextMeetingCard.swift in Sources */,
 				07C8C9E022A95E1E8A493F8D /* PermissionDeniedView.swift in Sources */,
 				520DE89D88E68137C2415925 /* PopoverView.swift in Sources */,
+				C14565DA4325D852CC8F3A6C /* ProfileMappingSettingsView.swift in Sources */,
 				5E0E1D0F01DF18F10BAC7D62 /* RecentMeetingsList.swift in Sources */,
 				84C4B6816F651D50147CFCEF /* SettingsView.swift in Sources */,
 				0A80EACF691BAECE9D506191 /* TimerSettingsView.swift in Sources */,

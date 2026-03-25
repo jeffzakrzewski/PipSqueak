@@ -11,6 +11,7 @@ struct MeetingEvent: Identifiable {
     let calendarColor: CGColor?
     let isCurrentlyActive: Bool
     let meetingLink: MeetingLink?
+    let calendarAccountEmail: String?
 
     init(from ekEvent: EKEvent) {
         self.id = ekEvent.eventIdentifier
@@ -21,6 +22,15 @@ struct MeetingEvent: Identifiable {
         self.calendarColor = ekEvent.calendar.cgColor
         self.isCurrentlyActive = Date() >= ekEvent.startDate && Date() < ekEvent.endDate
         self.meetingLink = MeetingLink.extract(from: ekEvent)
+
+        // Extract account email from calendar source (works for Google/CalDAV calendars)
+        let source = ekEvent.calendar.source
+        if source?.sourceType == .calDAV || source?.sourceType == .subscribed {
+            let title = source?.title ?? ""
+            self.calendarAccountEmail = title.contains("@") ? title : nil
+        } else {
+            self.calendarAccountEmail = nil
+        }
     }
 
     var truncatedTitle: String {
@@ -36,6 +46,17 @@ struct MeetingEvent: Identifiable {
 
     var timeUntilEnd: TimeInterval {
         endDate.timeIntervalSinceNow
+    }
+
+    /// Days from today (0 = today, 1 = tomorrow, etc.)
+    var daysFromToday: Int {
+        Calendar.current.dateComponents([.day], from: Calendar.current.startOfDay(for: Date()), to: Calendar.current.startOfDay(for: startDate)).day ?? 0
+    }
+
+    /// e.g. "+1d" or "+3d", empty string for today
+    var dayIndicator: String {
+        let days = daysFromToday
+        return days > 0 ? "+\(days)d" : ""
     }
 }
 
@@ -84,7 +105,8 @@ struct MeetingLink {
     }
 
     /// Launch the meeting - native app for Zoom/Teams, browser for Meet
-    func launch() {
+    @MainActor
+    func launch(calendarAccountEmail: String? = nil, browserProfileManager: BrowserProfileManager? = nil) {
         switch provider {
         case .zoom:
             launchNativeOrBrowser(
@@ -98,9 +120,34 @@ struct MeetingLink {
                 transform: Self.teamsToNativeURL,
                 fallback: url
             )
-        case .googleMeet, .webex, .unknown:
-            NSWorkspace.shared.open(url)
+        case .googleMeet:
+            let meetURL = Self.appendAuthUser(to: url, email: calendarAccountEmail)
+            // Use browser profile if mapped, otherwise default browser
+            if let manager = browserProfileManager,
+               let email = calendarAccountEmail,
+               manager.profileMappings[email] != nil {
+                manager.launchInProfile(url: meetURL, calendarAccountEmail: email)
+            } else {
+                NSWorkspace.shared.open(meetURL)
+            }
+        case .webex, .unknown:
+            if let manager = browserProfileManager,
+               let email = calendarAccountEmail,
+               manager.profileMappings[email] != nil {
+                manager.launchInProfile(url: url, calendarAccountEmail: email)
+            } else {
+                NSWorkspace.shared.open(url)
+            }
         }
+    }
+
+    private static func appendAuthUser(to url: URL, email: String?) -> URL {
+        guard let email = email else { return url }
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false) ?? URLComponents()
+        var queryItems = components.queryItems ?? []
+        queryItems.append(URLQueryItem(name: "authuser", value: email))
+        components.queryItems = queryItems
+        return components.url ?? url
     }
 
     // MARK: - Private

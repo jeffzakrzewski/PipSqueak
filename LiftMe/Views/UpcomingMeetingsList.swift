@@ -3,6 +3,7 @@ import SwiftUI
 struct UpcomingMeetingsList: View {
     let events: [MeetingEvent]
     let currentMeetingID: String?
+    var browserProfileManager: BrowserProfileManager?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -29,7 +30,7 @@ struct UpcomingMeetingsList: View {
 
                     if let link = event.meetingLink {
                         Button {
-                            link.launch()
+                            link.launch(calendarAccountEmail: event.calendarAccountEmail, browserProfileManager: browserProfileManager)
                         } label: {
                             Label("Join", systemImage: link.provider.iconName)
                                 .font(.caption2)
@@ -38,9 +39,16 @@ struct UpcomingMeetingsList: View {
                         .controlSize(.mini)
                     }
 
-                    Text(event.startDate, style: .time)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 2) {
+                        Text(event.startDate, style: .time)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        if !event.dayIndicator.isEmpty {
+                            Text(event.dayIndicator)
+                                .font(.caption2)
+                                .foregroundStyle(.orange)
+                        }
+                    }
                 }
                 .padding(.vertical, 3)
                 .padding(.horizontal, 4)

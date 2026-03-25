@@ -7,6 +7,7 @@ final class AppState {
     let calendarManager = CalendarManager()
     let countdownManager = CountdownManager()
     let audioManager = AudioManager()
+    let browserProfileManager = BrowserProfileManager()
 
     // Observable properties that sync to UserDefaults
     var leadInDuration: Double {
@@ -32,6 +33,20 @@ final class AppState {
         didSet { UserDefaults.standard.set(compactMenuBar, forKey: "compactMenuBar") }
     }
 
+    var showEventsWithoutLinks: Bool {
+        didSet {
+            UserDefaults.standard.set(showEventsWithoutLinks, forKey: "showEventsWithoutLinks")
+            refreshEvents()
+        }
+    }
+
+    var onlyShowTodayEvents: Bool {
+        didSet {
+            UserDefaults.standard.set(onlyShowTodayEvents, forKey: "onlyShowTodayEvents")
+            refreshEvents()
+        }
+    }
+
     var selectedCalendarIDs: Set<String> {
         didSet {
             let data = (try? JSONEncoder().encode(selectedCalendarIDs)) ?? Data()
@@ -49,6 +64,8 @@ final class AppState {
         self.customAudioBookmarkData = defaults.data(forKey: "customAudioBookmark") ?? Data()
         self.launchAtLogin = defaults.bool(forKey: "launchAtLogin")
         self.compactMenuBar = defaults.bool(forKey: "compactMenuBar")
+        self.showEventsWithoutLinks = defaults.bool(forKey: "showEventsWithoutLinks")
+        self.onlyShowTodayEvents = defaults.bool(forKey: "onlyShowTodayEvents")
 
         if let calData = defaults.data(forKey: "selectedCalendarIDs"),
            let ids = try? JSONDecoder().decode(Set<String>.self, from: calData) {
@@ -80,7 +97,11 @@ final class AppState {
     }
 
     func refreshEvents() {
-        calendarManager.fetchUpcomingEvents(selectedCalendarIDs: selectedCalendarIDs)
+        calendarManager.fetchUpcomingEvents(
+            selectedCalendarIDs: selectedCalendarIDs,
+            showEventsWithoutLinks: showEventsWithoutLinks,
+            onlyToday: onlyShowTodayEvents
+        )
         countdownManager.update(with: calendarManager.upcomingEvents)
         scheduleAudioIfNeeded()
     }

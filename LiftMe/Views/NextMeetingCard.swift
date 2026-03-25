@@ -3,6 +3,7 @@ import SwiftUI
 struct NextMeetingCard: View {
     let meeting: MeetingEvent
     let countdownManager: CountdownManager
+    var browserProfileManager: BrowserProfileManager?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -16,9 +17,16 @@ struct NextMeetingCard: View {
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text(meeting.startDate, style: .time)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                HStack(spacing: 2) {
+                    Text(meeting.startDate, style: .time)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    if !meeting.dayIndicator.isEmpty {
+                        Text(meeting.dayIndicator)
+                            .font(.caption2)
+                            .foregroundStyle(.orange)
+                    }
+                }
             }
 
             Text(meeting.title)
@@ -63,7 +71,7 @@ struct NextMeetingCard: View {
 
                 if let link = meeting.meetingLink {
                     Button {
-                        link.launch()
+                        link.launch(calendarAccountEmail: meeting.calendarAccountEmail, browserProfileManager: browserProfileManager)
                     } label: {
                         Label("Join \(link.provider.rawValue)", systemImage: link.provider.iconName)
                             .font(.subheadline)

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RecentMeetingsList: View {
     let events: [MeetingEvent]
+    var browserProfileManager: BrowserProfileManager?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -30,7 +31,7 @@ struct RecentMeetingsList: View {
 
                     if let link = event.meetingLink {
                         Button {
-                            link.launch()
+                            link.launch(calendarAccountEmail: event.calendarAccountEmail, browserProfileManager: browserProfileManager)
                         } label: {
                             Label("Join", systemImage: link.provider.iconName)
                                 .font(.caption2)

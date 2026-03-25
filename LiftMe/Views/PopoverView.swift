@@ -60,7 +60,11 @@ struct PopoverView: View {
     private var meetingContent: some View {
         VStack(spacing: 8) {
             if let meeting = appState.countdownManager.currentMeeting {
-                NextMeetingCard(meeting: meeting, countdownManager: appState.countdownManager)
+                NextMeetingCard(
+                    meeting: meeting,
+                    countdownManager: appState.countdownManager,
+                    browserProfileManager: appState.browserProfileManager
+                )
             } else {
                 noMeetingsView
             }
@@ -68,13 +72,15 @@ struct PopoverView: View {
             if appState.calendarManager.upcomingEvents.count > 1 {
                 UpcomingMeetingsList(
                     events: Array(appState.calendarManager.upcomingEvents.prefix(5)),
-                    currentMeetingID: appState.countdownManager.currentMeeting?.id
+                    currentMeetingID: appState.countdownManager.currentMeeting?.id,
+                    browserProfileManager: appState.browserProfileManager
                 )
             }
 
             if !appState.calendarManager.recentEvents.isEmpty {
                 RecentMeetingsList(
-                    events: Array(appState.calendarManager.recentEvents.prefix(3))
+                    events: Array(appState.calendarManager.recentEvents.prefix(3)),
+                    browserProfileManager: appState.browserProfileManager
                 )
             }
         }

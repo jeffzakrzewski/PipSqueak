@@ -32,6 +32,24 @@ struct GeneralSettingsView: View {
                 }
             }
 
+            Toggle(isOn: $appState.showEventsWithoutLinks) {
+                VStack(alignment: .leading) {
+                    Text("Show Events Without Meeting Links")
+                    Text("Display all calendar events, not just ones with video links")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Toggle(isOn: $appState.onlyShowTodayEvents) {
+                VStack(alignment: .leading) {
+                    Text("Only Show Today's Events")
+                    Text("Hide events from future days")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
             Divider()
 
             VStack(alignment: .leading, spacing: 4) {
