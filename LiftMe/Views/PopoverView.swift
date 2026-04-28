@@ -23,9 +23,6 @@ struct PopoverView: View {
         }
         .frame(width: 320)
         .padding(.vertical, 8)
-        .task {
-            await appState.start()
-        }
     }
 
     private var onboardingView: some View {

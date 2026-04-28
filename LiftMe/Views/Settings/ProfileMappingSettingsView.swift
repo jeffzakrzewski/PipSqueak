@@ -77,7 +77,7 @@ struct ProfileMappingSettingsView: View {
             let calendarEmails = uniqueCalendarEmails
 
             if calendarEmails.isEmpty {
-                Text("No calendar accounts with email addresses detected.")
+                Text("No calendar accounts detected.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
@@ -139,8 +139,7 @@ struct ProfileMappingSettingsView: View {
             .compactMap { calendar -> String? in
                 guard calendar.source.sourceType == .calDAV ||
                       calendar.source.sourceType == .subscribed else { return nil }
-                let title = calendar.source.title
-                return title.contains("@") ? title : nil
+                return calendar.source.title
             }
 
         return Array(Set(sources)).sorted()

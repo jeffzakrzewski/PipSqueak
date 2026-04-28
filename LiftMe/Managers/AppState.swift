@@ -85,6 +85,10 @@ final class AppState {
 
     func start() async {
         audioManager.setup()
+        browserProfileManager.detectBrowser()
+        calendarManager.onCalendarChanged = { [weak self] in
+            self?.refreshEvents()
+        }
         calendarManager.startObservingChanges()
         countdownManager.startObserving()
 
@@ -122,6 +126,9 @@ final class AppState {
 
     var menuBarTitle: String {
         countdownManager.compact = compactMenuBar
+        countdownManager.leadInDuration = Int(leadInDuration)
+        // Check audio scheduling on every UI tick
+        scheduleAudioIfNeeded()
         return countdownManager.menuBarTitle
     }
 

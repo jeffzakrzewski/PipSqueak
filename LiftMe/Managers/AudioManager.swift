@@ -15,6 +15,7 @@ final class AudioManager {
     private var customAudioBookmark: Data?
     private var wakeObserver: (any NSObjectProtocol)?
     private var scheduledMeetingID: String?
+    private var scheduledMeetingStartDate: Date?
 
     // The audio is 33 seconds total:
     // - 0:00 to 0:30 = countdown (30 seconds)
@@ -87,28 +88,61 @@ final class AudioManager {
     func schedulePlayback(for meeting: MeetingEvent, leadInSeconds: TimeInterval, isDNDActive: Bool) {
         guard !isDNDActive else { return }
         guard let player = player else { return }
-        guard scheduledMeetingID != meeting.id else { return }
+
+        // If already scheduled for this exact meeting+time, skip
+        if scheduledMeetingID == meeting.id && scheduledMeetingStartDate == meeting.startDate {
+            return
+        }
+
+        // Meeting changed or was rescheduled -- cancel and re-schedule
+        if scheduledMeetingID != nil {
+            cancelPlayback()
+        }
 
         let secondsUntilMeeting = meeting.startDate.timeIntervalSinceNow
+        guard secondsUntilMeeting > 0 else { return }
 
-        // Calculate when to start playback so pips hit at meeting start
-        let playbackStartOffset = secondsUntilMeeting - pipsOffset
+        // How many seconds before the meeting should audio start?
+        // Use the shorter of: configured lead-in, or the pips offset (audio length to pips)
+        let effectiveLeadIn = min(leadInSeconds, pipsOffset)
 
-        if playbackStartOffset <= 0 && secondsUntilMeeting > 0 {
-            // We're within the audio window -- start partway through
-            player.currentTime = pipsOffset - secondsUntilMeeting
-            player.volume = volume
-            player.play()
-            isPlaying = true
-            scheduledMeetingID = meeting.id
-        } else if playbackStartOffset > 0 && playbackStartOffset <= leadInSeconds {
-            // Schedule future playback using hardware clock
-            player.currentTime = 0
-            player.volume = volume
-            let playTime = player.deviceCurrentTime + playbackStartOffset + 0.01
+        // Audio should start at T - effectiveLeadIn
+        let secondsUntilPlaybackStart = secondsUntilMeeting - effectiveLeadIn
+
+        let shouldFadeIn = effectiveLeadIn > 2
+
+        if secondsUntilPlaybackStart > 1 {
+            // Schedule future playback using hardware clock for precise timing
+            let audioStartPosition = pipsOffset - effectiveLeadIn
+            player.currentTime = audioStartPosition
+            player.volume = shouldFadeIn ? 0 : volume
+            let playTime = player.deviceCurrentTime + secondsUntilPlaybackStart
             player.play(atTime: playTime)
             isPlaying = true
             scheduledMeetingID = meeting.id
+            scheduledMeetingStartDate = meeting.startDate
+            if shouldFadeIn {
+                // Use AVAudioPlayer's native fade -- schedule it to start when playback begins
+                DispatchQueue.main.asyncAfter(deadline: .now() + secondsUntilPlaybackStart) { [weak self] in
+                    guard let self, self.isPlaying else { return }
+                    self.player?.setVolume(self.volume, fadeDuration: 2.0)
+                }
+            }
+        } else if secondsUntilPlaybackStart <= 1 && secondsUntilMeeting > 0 {
+            // We're at or past the scheduled start -- play immediately from the right position
+            let audioPosition = pipsOffset - secondsUntilMeeting
+            player.currentTime = max(0, audioPosition)
+            if shouldFadeIn {
+                player.volume = 0
+                player.play()
+                player.setVolume(volume, fadeDuration: 2.0)
+            } else {
+                player.volume = volume
+                player.play()
+            }
+            isPlaying = true
+            scheduledMeetingID = meeting.id
+            scheduledMeetingStartDate = meeting.startDate
         }
     }
 
@@ -117,6 +151,7 @@ final class AudioManager {
         player?.currentTime = 0
         isPlaying = false
         scheduledMeetingID = nil
+        scheduledMeetingStartDate = nil
     }
 
     func updateVolume(_ newVolume: Float) {

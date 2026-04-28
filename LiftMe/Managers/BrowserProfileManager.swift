@@ -28,12 +28,21 @@ enum BrowserType: String, CaseIterable, Identifiable {
         case .safari, .arc, .unknown: return false
         }
     }
+
+    var appSupportSubpath: String? {
+        switch self {
+        case .chrome: return "Google/Chrome"
+        case .brave: return "BraveSoftware/Brave-Browser"
+        case .firefox: return "Firefox"
+        default: return nil
+        }
+    }
 }
 
 struct BrowserProfile: Identifiable, Hashable {
-    let id: String           // directory name ("Profile 1") or profile name for Firefox
-    let displayName: String  // user-visible name ("Work")
-    let email: String?       // Google account email (Chrome only)
+    let id: String
+    let displayName: String
+    let email: String?
     let browserType: BrowserType
 }
 
@@ -43,7 +52,6 @@ final class BrowserProfileManager {
     var defaultBrowser: BrowserType = .unknown
     var profiles: [BrowserProfile] = []
 
-    // Mapping: calendar account email -> browser profile ID
     var profileMappings: [String: String] {
         didSet {
             let data = (try? JSONEncoder().encode(profileMappings)) ?? Data()
@@ -70,10 +78,12 @@ final class BrowserProfileManager {
         guard let email = calendarAccountEmail,
               let profileID = profileMappings[email],
               defaultBrowser.supportsProfiles else {
-            // No mapping -- fall back to default browser
+            print("[LiftMe] No profile mapping for '\(calendarAccountEmail ?? "nil")' — mappings: \(profileMappings), browser: \(defaultBrowser.rawValue), supportsProfiles: \(defaultBrowser.supportsProfiles)")
             NSWorkspace.shared.open(url)
             return
         }
+
+        print("[LiftMe] Launching in profile '\(profileID)' for account '\(email)' in \(defaultBrowser.rawValue)")
 
         switch defaultBrowser {
         case .chrome, .brave:
@@ -105,33 +115,28 @@ final class BrowserProfileManager {
         }
     }
 
-    // MARK: - Profile Enumeration
+    // MARK: - Profile Enumeration (direct file access, no sandbox)
 
-    func enumerateProfiles(for browser: BrowserType) -> [BrowserProfile] {
+    private func enumerateProfiles(for browser: BrowserType) -> [BrowserProfile] {
+        guard let subpath = browser.appSupportSubpath else { return [] }
+
+        let home = FileManager.default.homeDirectoryForCurrentUser
+        let baseURL = home
+            .appendingPathComponent("Library/Application Support")
+            .appendingPathComponent(subpath)
+
         switch browser {
-        case .chrome:
-            return readChromiumProfiles(
-                appSupportPath: "Google/Chrome",
-                browserType: .chrome
-            )
-        case .brave:
-            return readChromiumProfiles(
-                appSupportPath: "BraveSoftware/Brave-Browser",
-                browserType: .brave
-            )
+        case .chrome, .brave:
+            return readChromiumProfiles(baseURL: baseURL, browserType: browser)
         case .firefox:
-            return readFirefoxProfiles()
+            return readFirefoxProfiles(baseURL: baseURL)
         default:
             return []
         }
     }
 
-    private func readChromiumProfiles(appSupportPath: String, browserType: BrowserType) -> [BrowserProfile] {
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        let localStatePath = home
-            .appendingPathComponent("Library/Application Support")
-            .appendingPathComponent(appSupportPath)
-            .appendingPathComponent("Local State")
+    private func readChromiumProfiles(baseURL: URL, browserType: BrowserType) -> [BrowserProfile] {
+        let localStatePath = baseURL.appendingPathComponent("Local State")
 
         guard let data = try? Data(contentsOf: localStatePath),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -155,10 +160,8 @@ final class BrowserProfileManager {
         .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
     }
 
-    private func readFirefoxProfiles() -> [BrowserProfile] {
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        let iniPath = home
-            .appendingPathComponent("Library/Application Support/Firefox/profiles.ini")
+    private func readFirefoxProfiles(baseURL: URL) -> [BrowserProfile] {
+        let iniPath = baseURL.appendingPathComponent("profiles.ini")
 
         guard let content = try? String(contentsOf: iniPath, encoding: .utf8) else {
             return []
@@ -183,7 +186,6 @@ final class BrowserProfileManager {
                 currentName = String(trimmed.dropFirst(5))
             }
         }
-        // Don't forget the last profile
         if let name = currentName {
             profiles.append(BrowserProfile(
                 id: name,
@@ -199,15 +201,32 @@ final class BrowserProfileManager {
     // MARK: - Profile-Aware Launch
 
     private func launchChromium(url: URL, browserName: String, profileDirectory: String) {
+        // Use direct binary execution for reliable profile targeting
+        let binaryPath = "/Applications/\(browserName).app/Contents/MacOS/\(browserName)"
+        let args = ["--profile-directory=\(profileDirectory)", url.absoluteString]
+
+        print("[LiftMe] Exec: \(binaryPath) \(args.joined(separator: " "))")
+
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-        process.arguments = [
-            "-na", browserName,
-            "--args",
-            "--profile-directory=\(profileDirectory)",
-            url.absoluteString,
-        ]
-        try? process.run()
+        process.executableURL = URL(fileURLWithPath: binaryPath)
+        process.arguments = args
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+        do {
+            try process.run()
+        } catch {
+            print("[LiftMe] Direct binary failed: \(error), trying open -na")
+            // Fallback to open -na
+            let fallback = Process()
+            fallback.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+            fallback.arguments = ["-na", browserName, "--args", "--profile-directory=\(profileDirectory)", url.absoluteString]
+            do {
+                try fallback.run()
+            } catch {
+                print("[LiftMe] open -na also failed: \(error)")
+                NSWorkspace.shared.open(url)
+            }
+        }
     }
 
     private func launchFirefox(url: URL, profileName: String) {
@@ -224,6 +243,10 @@ final class BrowserProfileManager {
             "-no-remote",
             url.absoluteString,
         ]
-        try? process.run()
+        do {
+            try process.run()
+        } catch {
+            NSWorkspace.shared.open(url)
+        }
     }
 }

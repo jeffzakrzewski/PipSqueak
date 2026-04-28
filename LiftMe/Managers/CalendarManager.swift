@@ -12,6 +12,7 @@ final class CalendarManager {
     var recentEvents: [MeetingEvent] = []
 
     private var changeObserver: (any NSObjectProtocol)?
+    var onCalendarChanged: (() -> Void)?
 
     func requestAccess() async {
         do {
@@ -78,6 +79,7 @@ final class CalendarManager {
         ) { [weak self] _ in
             Task { @MainActor in
                 self?.loadCalendars()
+                self?.onCalendarChanged?()
             }
         }
     }

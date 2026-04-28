@@ -33,6 +33,10 @@ final class CountdownManager {
         case .idle:
             return ""
         case .upcoming(let meeting):
+            // Don't show countdown for meetings past tomorrow
+            if meeting.daysFromToday > 1 {
+                return compact ? "" : meeting.truncatedTitle
+            }
             if remainingSeconds <= 0 {
                 return compact ? "Now" : "In: \(meeting.truncatedTitle)"
             }
@@ -43,12 +47,14 @@ final class CountdownManager {
         }
     }
 
+    var leadInDuration: Int = 30
+
     var menuBarIcon: String {
         switch meetingState {
         case .idle:
             return "calendar"
         case .upcoming:
-            if remainingSeconds <= 60 {
+            if remainingSeconds <= leadInDuration {
                 return "speaker.wave.3.fill"
             }
             return "calendar.badge.clock"

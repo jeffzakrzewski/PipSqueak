@@ -7,7 +7,7 @@ struct SettingsView: View {
                 .tabItem { Label("Calendars", systemImage: "calendar") }
 
             AudioSettingsView()
-                .tabItem { Label("Audio & Timer", systemImage: "speaker.wave.2") }
+                .tabItem { Label("Audio", systemImage: "speaker.wave.2") }
 
             ProfileMappingSettingsView()
                 .tabItem { Label("Browser", systemImage: "globe") }
@@ -15,6 +15,6 @@ struct SettingsView: View {
             GeneralSettingsView()
                 .tabItem { Label("General", systemImage: "gear") }
         }
-        .frame(width: 520, height: 460)
+        .frame(width: 580, height: 460)
     }
 }

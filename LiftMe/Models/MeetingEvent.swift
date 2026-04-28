@@ -23,11 +23,10 @@ struct MeetingEvent: Identifiable {
         self.isCurrentlyActive = Date() >= ekEvent.startDate && Date() < ekEvent.endDate
         self.meetingLink = MeetingLink.extract(from: ekEvent)
 
-        // Extract account email from calendar source (works for Google/CalDAV calendars)
+        // Extract account identifier from calendar source
         let source = ekEvent.calendar.source
         if source?.sourceType == .calDAV || source?.sourceType == .subscribed {
-            let title = source?.title ?? ""
-            self.calendarAccountEmail = title.contains("@") ? title : nil
+            self.calendarAccountEmail = source?.title
         } else {
             self.calendarAccountEmail = nil
         }
@@ -122,6 +121,7 @@ struct MeetingLink {
             )
         case .googleMeet:
             let meetURL = Self.appendAuthUser(to: url, email: calendarAccountEmail)
+            print("[LiftMe] Meet launch — account: '\(calendarAccountEmail ?? "nil")', manager: \(browserProfileManager != nil), mappings: \(browserProfileManager?.profileMappings ?? [:])")
             // Use browser profile if mapped, otherwise default browser
             if let manager = browserProfileManager,
                let email = calendarAccountEmail,
@@ -142,7 +142,8 @@ struct MeetingLink {
     }
 
     private static func appendAuthUser(to url: URL, email: String?) -> URL {
-        guard let email = email else { return url }
+        // Only append authuser when the value is an actual email address
+        guard let email = email, email.contains("@") else { return url }
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false) ?? URLComponents()
         var queryItems = components.queryItems ?? []
         queryItems.append(URLQueryItem(name: "authuser", value: email))
