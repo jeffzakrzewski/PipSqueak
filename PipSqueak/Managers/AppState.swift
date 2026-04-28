@@ -146,9 +146,11 @@ final class AppState {
             selectedCalendarIDs: selectedCalendarIDs,
             showEventsWithoutLinks: showEventsWithoutLinks,
             onlyToday: onlyShowTodayEvents
-        )
-        countdownManager.update(with: calendarManager.upcomingEvents)
-        scheduleAudioIfNeeded()
+        ) { [weak self] in
+            guard let self else { return }
+            self.countdownManager.update(with: self.calendarManager.upcomingEvents)
+            self.scheduleAudioIfNeeded()
+        }
     }
 
     func toggleCalendar(_ calendarID: String) {

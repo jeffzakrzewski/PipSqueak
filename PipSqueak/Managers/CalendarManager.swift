@@ -50,14 +50,16 @@ final class CalendarManager {
     func fetchUpcomingEvents(
         selectedCalendarIDs: Set<String>,
         showEventsWithoutLinks: Bool = false,
-        onlyToday: Bool = false
+        onlyToday: Bool = false,
+        completion: (@MainActor () -> Void)? = nil
     ) {
-        guard authorizationStatus == .fullAccess else { return }
+        guard authorizationStatus == .fullAccess else { completion?(); return }
 
         let calendars = allCalendars.filter { selectedCalendarIDs.contains($0.calendarIdentifier) }
         guard !calendars.isEmpty else {
             upcomingEvents = []
             recentEvents = []
+            completion?()
             return
         }
 
@@ -95,6 +97,7 @@ final class CalendarManager {
             await MainActor.run {
                 self?.upcomingEvents = upcoming
                 self?.recentEvents = recent
+                completion?()
             }
         }
     }

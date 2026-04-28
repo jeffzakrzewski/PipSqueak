@@ -3,6 +3,7 @@ import SwiftUI
 struct PopoverView: View {
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         VStack(spacing: 0) {
@@ -136,9 +137,6 @@ struct PopoverView: View {
     private func showSettings() {
         dismiss()
         NSApp.activate(ignoringOtherApps: true)
-        // showSettingsWindow: was added on macOS 14; older SDKs only know
-        // showPreferencesWindow:. We send via string selector so the call
-        // works regardless of which SDK is compiling.
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        openWindow(id: "settings")
     }
 }
