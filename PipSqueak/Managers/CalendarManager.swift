@@ -4,7 +4,7 @@ import Foundation
 @MainActor
 @Observable
 final class CalendarManager {
-    let eventStore = EKEventStore()
+    private(set) var eventStore = EKEventStore()
 
     var authorizationStatus: EKAuthorizationStatus = EKEventStore.authorizationStatus(for: .event)
     var allCalendars: [EKCalendar] = []
@@ -24,6 +24,23 @@ final class CalendarManager {
         } catch {
             authorizationStatus = .denied
         }
+    }
+
+    /// Re-check the system authorization status (useful after the user grants
+    /// access in System Settings while the app is running). Returns true if the
+    /// status changed since the last published value.
+    @discardableResult
+    func recheckAuthorization() -> Bool {
+        let current = EKEventStore.authorizationStatus(for: .event)
+        guard current != authorizationStatus else { return false }
+        authorizationStatus = current
+        if current == .fullAccess {
+            // Recreate the event store; the previous instance was created
+            // before access was granted and may not see all calendars.
+            eventStore = EKEventStore()
+            loadCalendars()
+        }
+        return true
     }
 
     func loadCalendars() {
@@ -49,26 +66,37 @@ final class CalendarManager {
         let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
         let end = onlyToday ? endOfDay : Calendar.current.date(byAdding: .day, value: 7, to: now)!
 
-        // Fetch events
         let predicate = eventStore.predicateForEvents(withStart: startOfDay, end: end, calendars: calendars)
+        let store = eventStore
 
-        let allEvents = eventStore.events(matching: predicate)
-            .filter { !$0.isAllDay }
-            .filter { !self.isDeclined($0) }
+        // Fetch and transform off the main thread; publish results back on main.
+        // EKEventStore is documented as thread-safe for read operations; we
+        // capture it nonisolated to allow the detached fetch.
+        nonisolated(unsafe) let storeRef = store
+        nonisolated(unsafe) let predicateRef = predicate
 
-        let meetingEvents = allEvents.map { MeetingEvent(from: $0) }
+        Task.detached { [weak self] in
+            let allEvents = storeRef.events(matching: predicateRef)
+                .filter { !$0.isAllDay }
+                .filter { !Self.isDeclined($0) }
 
-        // Upcoming: haven't ended yet (includes currently active)
-        upcomingEvents = meetingEvents
-            .filter { $0.endDate > now }
-            .filter { showEventsWithoutLinks || $0.meetingLink != nil }
-            .sorted { $0.startDate < $1.startDate }
+            let meetingEvents = allEvents.map { MeetingEvent(from: $0) }
 
-        // Recent: already ended today, only those with meeting links (for joining late)
-        recentEvents = meetingEvents
-            .filter { $0.endDate <= now && $0.startDate >= startOfDay }
-            .filter { $0.meetingLink != nil }
-            .sorted { $0.startDate > $1.startDate }
+            let upcoming = meetingEvents
+                .filter { $0.endDate > now }
+                .filter { showEventsWithoutLinks || $0.meetingLink != nil }
+                .sorted { $0.startDate < $1.startDate }
+
+            let recent = meetingEvents
+                .filter { $0.endDate <= now && $0.startDate >= startOfDay }
+                .filter { $0.meetingLink != nil }
+                .sorted { $0.startDate > $1.startDate }
+
+            await MainActor.run {
+                self?.upcomingEvents = upcoming
+                self?.recentEvents = recent
+            }
+        }
     }
 
     func startObservingChanges() {
@@ -91,7 +119,7 @@ final class CalendarManager {
         }
     }
 
-    private func isDeclined(_ event: EKEvent) -> Bool {
+    nonisolated private static func isDeclined(_ event: EKEvent) -> Bool {
         guard let attendees = event.attendees else { return false }
         for attendee in attendees where attendee.isCurrentUser {
             return attendee.participantStatus == .declined

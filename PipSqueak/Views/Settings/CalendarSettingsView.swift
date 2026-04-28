@@ -1,3 +1,4 @@
+import EventKit
 import SwiftUI
 
 struct CalendarSettingsView: View {
@@ -70,5 +71,3 @@ struct CalendarSettingsView: View {
         .padding(.leading, 8)
     }
 }
-
-import EventKit

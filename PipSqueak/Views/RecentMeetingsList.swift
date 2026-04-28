@@ -38,6 +38,7 @@ struct RecentMeetingsList: View {
                         }
                         .buttonStyle(.bordered)
                         .controlSize(.mini)
+                        .accessibilityLabel("Join \(event.title)")
                     }
 
                     Text(event.startDate, style: .time)

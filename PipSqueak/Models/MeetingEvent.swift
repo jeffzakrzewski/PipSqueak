@@ -2,7 +2,7 @@ import AppKit
 import EventKit
 import Foundation
 
-struct MeetingEvent: Identifiable {
+struct MeetingEvent: Identifiable, @unchecked Sendable {
     let id: String
     let title: String
     let startDate: Date
@@ -14,7 +14,10 @@ struct MeetingEvent: Identifiable {
     let calendarAccountEmail: String?
 
     init(from ekEvent: EKEvent) {
-        self.id = ekEvent.eventIdentifier
+        // Composite id: identifier#start-time. Handles recurring instances
+        // which share an event identifier across occurrences.
+        let baseID = ekEvent.eventIdentifier ?? UUID().uuidString
+        self.id = "\(baseID)#\(ekEvent.startDate.timeIntervalSince1970)"
         self.title = ekEvent.title ?? "Untitled"
         self.startDate = ekEvent.startDate
         self.endDate = ekEvent.endDate
@@ -121,23 +124,23 @@ struct MeetingLink {
             )
         case .googleMeet:
             let meetURL = Self.appendAuthUser(to: url, email: calendarAccountEmail)
+            #if DEBUG
             print("[PipSqueak] Meet launch — account: '\(calendarAccountEmail ?? "nil")', manager: \(browserProfileManager != nil), mappings: \(browserProfileManager?.profileMappings ?? [:])")
-            // Use browser profile if mapped, otherwise default browser
-            if let manager = browserProfileManager,
-               let email = calendarAccountEmail,
-               manager.profileMappings[email] != nil {
-                manager.launchInProfile(url: meetURL, calendarAccountEmail: email)
-            } else {
-                NSWorkspace.shared.open(meetURL)
-            }
+            #endif
+            openInMappedProfileOrDefault(url: meetURL, email: calendarAccountEmail, manager: browserProfileManager)
         case .webex, .unknown:
-            if let manager = browserProfileManager,
-               let email = calendarAccountEmail,
-               manager.profileMappings[email] != nil {
-                manager.launchInProfile(url: url, calendarAccountEmail: email)
-            } else {
-                NSWorkspace.shared.open(url)
-            }
+            openInMappedProfileOrDefault(url: url, email: calendarAccountEmail, manager: browserProfileManager)
+        }
+    }
+
+    @MainActor
+    private func openInMappedProfileOrDefault(url: URL, email: String?, manager: BrowserProfileManager?) {
+        if let manager,
+           let email,
+           manager.profileMappings[email] != nil {
+            manager.launchInProfile(url: url, calendarAccountEmail: email)
+        } else {
+            NSWorkspace.shared.open(url)
         }
     }
 
@@ -145,7 +148,8 @@ struct MeetingLink {
         // Only append authuser when the value is an actual email address
         guard let email = email, email.contains("@") else { return url }
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false) ?? URLComponents()
-        var queryItems = components.queryItems ?? []
+        // Strip any existing authuser before appending the new one to avoid duplicates.
+        var queryItems = (components.queryItems ?? []).filter { $0.name != "authuser" }
         queryItems.append(URLQueryItem(name: "authuser", value: email))
         components.queryItems = queryItems
         return components.url ?? url

@@ -10,8 +10,11 @@ final class CountdownManager {
     var meetingState: MeetingState = .idle
     var compact: Bool = false
 
+    /// Called once per timer tick. AppState uses this to drive audio scheduling
+    /// without coupling CountdownManager to AppState.
+    var onTick: (() -> Void)?
+
     private var timer: Timer?
-    private var wakeObserver: (any NSObjectProtocol)?
 
     enum MeetingState: Equatable {
         case idle
@@ -40,7 +43,7 @@ final class CountdownManager {
             if remainingSeconds <= 0 {
                 return compact ? "Now" : "In: \(meeting.truncatedTitle)"
             }
-            let time = formatTime(remainingSeconds)
+            let time = MeetingTimeFormatter.format(remainingSeconds, style: .compact)
             return compact ? "in \(time)" : "\(meeting.truncatedTitle) in \(time)"
         case .inMeeting(let meeting):
             return compact ? "In mtg" : "In: \(meeting.truncatedTitle)"
@@ -64,16 +67,14 @@ final class CountdownManager {
     }
 
     func startObserving() {
-        observeWake()
+        // Wake handling is centralized in AppState. CountdownManager does not
+        // observe system events directly anymore — kept for symmetry with
+        // stopObserving() which still tears down the timer.
     }
 
     func stopObserving() {
         timer?.invalidate()
         timer = nil
-        if let observer = wakeObserver {
-            NSWorkspace.shared.notificationCenter.removeObserver(observer)
-            wakeObserver = nil
-        }
     }
 
     func update(with events: [MeetingEvent]) {
@@ -82,6 +83,11 @@ final class CountdownManager {
         // Find current active meeting
         if let activeMeeting = events.first(where: { now >= $0.startDate && now < $0.endDate }) {
             let nextAfterCurrent = events.first(where: { $0.startDate > now })
+            // Intentional: when an upcoming meeting is within 5 minutes while
+            // the current meeting is still active, hand off currentMeeting to
+            // the upcoming one. The menu bar reflects the next meeting and
+            // audio scheduling for that upcoming meeting is acceptable per
+            // design — even though the current meeting is still in progress.
             if let next = nextAfterCurrent, next.timeUntilStart <= 300 {
                 setUpcoming(next)
             } else {
@@ -129,6 +135,9 @@ final class CountdownManager {
 
         if now >= meeting.endDate {
             meetingState = .idle
+            currentMeeting = nil
+            stopTimer()
+            onTick?()
             return
         }
 
@@ -139,38 +148,6 @@ final class CountdownManager {
             remainingSeconds = max(0, Int(ceil(meeting.startDate.timeIntervalSince(now))))
             meetingState = .upcoming(meeting)
         }
-    }
-
-    private func formatTime(_ totalSeconds: Int) -> String {
-        if totalSeconds <= 0 { return "0s" }
-
-        let hours = totalSeconds / 3600
-        let minutes = (totalSeconds % 3600) / 60
-        let seconds = totalSeconds % 60
-
-        if hours > 0 {
-            if minutes == 0 {
-                return "\(hours)h"
-            }
-            return "\(hours)h \(minutes)m"
-        }
-
-        if minutes > 0 {
-            return "\(minutes)m"
-        }
-
-        return "\(seconds)s"
-    }
-
-    private func observeWake() {
-        wakeObserver = NSWorkspace.shared.notificationCenter.addObserver(
-            forName: NSWorkspace.didWakeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            Task { @MainActor in
-                self?.tick()
-            }
-        }
+        onTick?()
     }
 }

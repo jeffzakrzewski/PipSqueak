@@ -1,7 +1,7 @@
 import AppKit
 import Foundation
 
-enum BrowserType: String, CaseIterable, Identifiable {
+enum BrowserType: String, CaseIterable, Identifiable, Sendable {
     case chrome = "Google Chrome"
     case brave = "Brave Browser"
     case firefox = "Firefox"
@@ -39,7 +39,7 @@ enum BrowserType: String, CaseIterable, Identifiable {
     }
 }
 
-struct BrowserProfile: Identifiable, Hashable {
+struct BrowserProfile: Identifiable, Hashable, Sendable {
     let id: String
     let displayName: String
     let email: String?
@@ -68,9 +68,16 @@ final class BrowserProfileManager {
         }
     }
 
-    func detectBrowser() {
-        defaultBrowser = detectDefaultBrowser()
-        profiles = enumerateProfiles(for: defaultBrowser)
+    func detectBrowser() async {
+        // Default-browser lookup uses NSWorkspace which is fine on the main
+        // actor; profile enumeration touches the filesystem so we hop to a
+        // detached task for that work.
+        let detected = detectDefaultBrowser()
+        let enumerated: [BrowserProfile] = await Task.detached {
+            Self.enumerateProfiles(for: detected)
+        }.value
+        defaultBrowser = detected
+        profiles = enumerated
     }
 
     /// Launch a URL in a specific browser profile, or fall back to default
@@ -78,12 +85,16 @@ final class BrowserProfileManager {
         guard let email = calendarAccountEmail,
               let profileID = profileMappings[email],
               defaultBrowser.supportsProfiles else {
+            #if DEBUG
             print("[PipSqueak] No profile mapping for '\(calendarAccountEmail ?? "nil")' — mappings: \(profileMappings), browser: \(defaultBrowser.rawValue), supportsProfiles: \(defaultBrowser.supportsProfiles)")
+            #endif
             NSWorkspace.shared.open(url)
             return
         }
 
+        #if DEBUG
         print("[PipSqueak] Launching in profile '\(profileID)' for account '\(email)' in \(defaultBrowser.rawValue)")
+        #endif
 
         switch defaultBrowser {
         case .chrome, .brave:
@@ -117,7 +128,7 @@ final class BrowserProfileManager {
 
     // MARK: - Profile Enumeration (direct file access, no sandbox)
 
-    private func enumerateProfiles(for browser: BrowserType) -> [BrowserProfile] {
+    nonisolated private static func enumerateProfiles(for browser: BrowserType) -> [BrowserProfile] {
         guard let subpath = browser.appSupportSubpath else { return [] }
 
         let home = FileManager.default.homeDirectoryForCurrentUser
@@ -135,7 +146,7 @@ final class BrowserProfileManager {
         }
     }
 
-    private func readChromiumProfiles(baseURL: URL, browserType: BrowserType) -> [BrowserProfile] {
+    nonisolated private static func readChromiumProfiles(baseURL: URL, browserType: BrowserType) -> [BrowserProfile] {
         let localStatePath = baseURL.appendingPathComponent("Local State")
 
         guard let data = try? Data(contentsOf: localStatePath),
@@ -160,7 +171,7 @@ final class BrowserProfileManager {
         .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
     }
 
-    private func readFirefoxProfiles(baseURL: URL) -> [BrowserProfile] {
+    nonisolated private static func readFirefoxProfiles(baseURL: URL) -> [BrowserProfile] {
         let iniPath = baseURL.appendingPathComponent("profiles.ini")
 
         guard let content = try? String(contentsOf: iniPath, encoding: .utf8) else {
@@ -205,17 +216,29 @@ final class BrowserProfileManager {
         let binaryPath = "/Applications/\(browserName).app/Contents/MacOS/\(browserName)"
         let args = ["--profile-directory=\(profileDirectory)", url.absoluteString]
 
+        #if DEBUG
         print("[PipSqueak] Exec: \(binaryPath) \(args.joined(separator: " "))")
+        #endif
 
         let process = Process()
         process.executableURL = URL(fileURLWithPath: binaryPath)
         process.arguments = args
         process.standardOutput = FileHandle.nullDevice
         process.standardError = FileHandle.nullDevice
+        // If the launched browser exits non-zero, fall back to NSWorkspace.
+        process.terminationHandler = { p in
+            if p.terminationStatus != 0 {
+                Task { @MainActor in
+                    NSWorkspace.shared.open(url)
+                }
+            }
+        }
         do {
             try process.run()
         } catch {
+            #if DEBUG
             print("[PipSqueak] Direct binary failed: \(error), trying open -na")
+            #endif
             // Fallback to open -na
             let fallback = Process()
             fallback.executableURL = URL(fileURLWithPath: "/usr/bin/open")
@@ -223,7 +246,9 @@ final class BrowserProfileManager {
             do {
                 try fallback.run()
             } catch {
+                #if DEBUG
                 print("[PipSqueak] open -na also failed: \(error)")
+                #endif
                 NSWorkspace.shared.open(url)
             }
         }
@@ -243,6 +268,13 @@ final class BrowserProfileManager {
             "-no-remote",
             url.absoluteString,
         ]
+        process.terminationHandler = { p in
+            if p.terminationStatus != 0 {
+                Task { @MainActor in
+                    NSWorkspace.shared.open(url)
+                }
+            }
+        }
         do {
             try process.run()
         } catch {

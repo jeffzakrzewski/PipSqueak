@@ -37,6 +37,7 @@ struct UpcomingMeetingsList: View {
                         }
                         .buttonStyle(.bordered)
                         .controlSize(.mini)
+                        .accessibilityLabel("Join \(event.title)")
                     }
 
                     HStack(spacing: 2) {

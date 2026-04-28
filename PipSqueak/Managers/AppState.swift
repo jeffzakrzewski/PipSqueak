@@ -1,3 +1,5 @@
+import AppKit
+import EventKit
 import Foundation
 import SwiftUI
 
@@ -11,7 +13,10 @@ final class AppState {
 
     // Observable properties that sync to UserDefaults
     var leadInDuration: Double {
-        didSet { UserDefaults.standard.set(leadInDuration, forKey: "leadInDuration") }
+        didSet {
+            UserDefaults.standard.set(leadInDuration, forKey: "leadInDuration")
+            countdownManager.leadInDuration = Int(leadInDuration)
+        }
     }
 
     var audioVolume: Double {
@@ -30,7 +35,10 @@ final class AppState {
     }
 
     var compactMenuBar: Bool {
-        didSet { UserDefaults.standard.set(compactMenuBar, forKey: "compactMenuBar") }
+        didSet {
+            UserDefaults.standard.set(compactMenuBar, forKey: "compactMenuBar")
+            countdownManager.compact = compactMenuBar
+        }
     }
 
     var showEventsWithoutLinks: Bool {
@@ -55,11 +63,19 @@ final class AppState {
     }
 
     private var refreshTimer: Timer?
+    private var isStarted = false
+    private var wakeObserver: (any NSObjectProtocol)?
+    private var clockChangeObserver: (any NSObjectProtocol)?
+    private var didBecomeActiveObserver: (any NSObjectProtocol)?
+    private var lastKnownAuthStatus: EKAuthorizationStatus = EKEventStore.authorizationStatus(for: .event)
 
     init() {
         // Load persisted values
         let defaults = UserDefaults.standard
-        self.leadInDuration = defaults.object(forKey: "leadInDuration") as? Double ?? 30
+        var loadedLeadIn = defaults.object(forKey: "leadInDuration") as? Double ?? 30
+        // Normalize legacy 60s lead-in — option removed; clamp to 30.
+        if loadedLeadIn == 60 { loadedLeadIn = 30 }
+        self.leadInDuration = loadedLeadIn
         self.audioVolume = defaults.object(forKey: "audioVolume") as? Double ?? 0.7
         self.customAudioBookmarkData = defaults.data(forKey: "customAudioBookmark") ?? Data()
         self.launchAtLogin = defaults.bool(forKey: "launchAtLogin")
@@ -75,29 +91,54 @@ final class AppState {
         }
 
         audioManager.volume = Float(audioVolume)
+        countdownManager.compact = compactMenuBar
+        countdownManager.leadInDuration = Int(leadInDuration)
+
+        // Audio scheduling callback fires on every countdown tick.
+        countdownManager.onTick = { [weak self] in
+            self?.scheduleAudioIfNeeded()
+        }
 
         if !customAudioBookmarkData.isEmpty {
-            audioManager.loadCustomAudio(bookmark: customAudioBookmarkData)
+            audioManager.loadCustomAudio(bookmark: customAudioBookmarkData) { [weak self] regeneratedBookmark in
+                guard let self, let regeneratedBookmark else { return }
+                self.customAudioBookmarkData = regeneratedBookmark
+            }
         } else {
             audioManager.loadBundledAudio()
         }
     }
 
     func start() async {
+        guard !isStarted else { return }
+        isStarted = true
+
         audioManager.setup()
-        browserProfileManager.detectBrowser()
+        await browserProfileManager.detectBrowser()
         calendarManager.onCalendarChanged = { [weak self] in
             self?.refreshEvents()
         }
         calendarManager.startObservingChanges()
         countdownManager.startObserving()
 
+        // Centralized wake / clock-change / app-activation observers.
+        observeSystemEvents()
+
         await calendarManager.requestAccess()
+        lastKnownAuthStatus = calendarManager.authorizationStatus
 
         if calendarManager.authorizationStatus == .fullAccess {
             refreshEvents()
             startRefreshLoop()
         }
+    }
+
+    /// Called by views (e.g. PermissionDeniedView) after a successful access grant.
+    func onPermissionGranted() {
+        guard calendarManager.authorizationStatus == .fullAccess else { return }
+        calendarManager.loadCalendars()
+        refreshEvents()
+        startRefreshLoop()
     }
 
     func refreshEvents() {
@@ -125,11 +166,7 @@ final class AppState {
     }
 
     var menuBarTitle: String {
-        countdownManager.compact = compactMenuBar
-        countdownManager.leadInDuration = Int(leadInDuration)
-        // Check audio scheduling on every UI tick
-        scheduleAudioIfNeeded()
-        return countdownManager.menuBarTitle
+        countdownManager.menuBarTitle
     }
 
     var menuBarIcon: String {
@@ -146,25 +183,79 @@ final class AppState {
         RunLoop.main.add(refreshTimer!, forMode: .common)
     }
 
-    private func scheduleAudioIfNeeded() {
+    func scheduleAudioIfNeeded() {
+        // Note: Focus state cannot be reliably queried by third-party apps on
+        // macOS 12+; DND/Focus suppression is not implemented.
         guard let meeting = countdownManager.currentMeeting else {
             audioManager.cancelPlayback()
             return
         }
 
         let secondsUntilMeeting = meeting.startDate.timeIntervalSinceNow
-        guard secondsUntilMeeting > 0 else { return }
-
-        let isDND = isDNDActive()
         let leadIn = leadInDuration
 
+        // If we previously scheduled for a different meeting (or different start),
+        // cancel that schedule before deciding what to do for the current meeting.
+        if let scheduledID = audioManager.scheduledMeetingID,
+           scheduledID != meeting.id || audioManager.scheduledMeetingStartDate != meeting.startDate {
+            audioManager.cancelPlayback()
+        }
+
+        guard secondsUntilMeeting > 0 else { return }
+
         if secondsUntilMeeting <= leadIn + 5 {
-            audioManager.schedulePlayback(for: meeting, leadInSeconds: leadIn, isDNDActive: isDND)
+            audioManager.schedulePlayback(for: meeting, leadInSeconds: leadIn)
         }
     }
 
-    private func isDNDActive() -> Bool {
-        let dndDefaults = UserDefaults(suiteName: "com.apple.notificationcenterui")
-        return dndDefaults?.bool(forKey: "doNotDisturb") ?? false
+    // MARK: - Centralized system observers
+
+    private func observeSystemEvents() {
+        // Wake from sleep: refresh everything (cascades to countdown + audio scheduling).
+        wakeObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didWakeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.refreshEvents()
+            }
+        }
+
+        // System clock changed (NTP update, manual change, timezone shift):
+        // cancel any pending audio and re-schedule against the new clock.
+        clockChangeObserver = NotificationCenter.default.addObserver(
+            forName: Notification.Name.NSSystemClockDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                guard let self else { return }
+                self.audioManager.cancelPlayback()
+                self.refreshEvents()
+            }
+        }
+
+        // App activation: re-check calendar authorization in case the user
+        // granted access in System Settings while we were backgrounded.
+        didBecomeActiveObserver = NotificationCenter.default.addObserver(
+            forName: NSApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.handleDidBecomeActive()
+            }
+        }
+    }
+
+    private func handleDidBecomeActive() {
+        let changed = calendarManager.recheckAuthorization()
+        let current = calendarManager.authorizationStatus
+        if changed && current == .fullAccess {
+            refreshEvents()
+            startRefreshLoop()
+        }
+        lastKnownAuthStatus = current
     }
 }

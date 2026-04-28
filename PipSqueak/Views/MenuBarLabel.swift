@@ -5,6 +5,7 @@ struct MenuBarLabel: View {
     @Environment(AppState.self) private var appState
     @State private var flashOn = false
     @State private var justStartedMeeting = false
+    @State private var pendingFlashWork: [DispatchWorkItem] = []
 
     private var remaining: Int {
         appState.countdownManager.remainingSeconds
@@ -22,7 +23,9 @@ struct MenuBarLabel: View {
                     .monospacedDigit()
             }
         }
+        .accessibilityLabel("PipSqueak — \(appState.menuBarTitle)")
         .onChange(of: remaining) { _, secs in
+            cancelPendingFlashWork()
             guard secs > 0, secs <= 10 else {
                 if !justStartedMeeting {
                     flashOn = false
@@ -40,21 +43,31 @@ struct MenuBarLabel: View {
             }
         }
         .onChange(of: appState.countdownManager.meetingState) { oldState, newState in
+            cancelPendingFlashWork()
             if case .inMeeting = newState {
                 if case .upcoming = oldState {
                     flashOn = false
                     justStartedMeeting = true
                     updateStatusItemBackground(color: .systemGreen)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    let work = DispatchWorkItem {
                         justStartedMeeting = false
                         updateStatusItemBackground(color: nil)
                     }
+                    pendingFlashWork.append(work)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: work)
                 }
             }
         }
         .task {
             await appState.start()
         }
+    }
+
+    private func cancelPendingFlashWork() {
+        for work in pendingFlashWork {
+            work.cancel()
+        }
+        pendingFlashWork.removeAll()
     }
 
     /// Flash ON at each interval offset, OFF halfway between each
@@ -65,17 +78,22 @@ struct MenuBarLabel: View {
 
         for offset in intervals {
             // ON
-            DispatchQueue.main.asyncAfter(deadline: .now() + offset) {
+            let onWork = DispatchWorkItem {
                 guard remaining == secs, !justStartedMeeting else { return }
                 flashOn = true
                 updateStatusItemBackground(color: .systemRed)
             }
+            pendingFlashWork.append(onWork)
+            DispatchQueue.main.asyncAfter(deadline: .now() + offset, execute: onWork)
+
             // OFF
-            DispatchQueue.main.asyncAfter(deadline: .now() + offset + halfGap) {
+            let offWork = DispatchWorkItem {
                 guard remaining == secs, !justStartedMeeting else { return }
                 flashOn = false
                 updateStatusItemBackground(color: nil)
             }
+            pendingFlashWork.append(offWork)
+            DispatchQueue.main.asyncAfter(deadline: .now() + offset + halfGap, execute: offWork)
         }
     }
 
@@ -92,6 +110,11 @@ struct MenuBarLabel: View {
         }
     }
 
+    /// Walks NSApp.windows looking for the NSStatusBar host window by class-name
+    /// substring. Private-AppKit-shaped — class names and window-tree shape can
+    /// change across macOS versions. If this returns nil the menu-bar flash
+    /// silently no-ops; we log a warning the first time so future breakage is
+    /// observable.
     private func findStatusItemButton() -> NSStatusBarButton? {
         for window in NSApp.windows {
             let windowClass = String(describing: type(of: window))
@@ -100,6 +123,10 @@ struct MenuBarLabel: View {
                     return button
                 }
             }
+        }
+        if !MenuBarLabelWarningState.didWarnLookupFailure {
+            MenuBarLabelWarningState.didWarnLookupFailure = true
+            print("[PipSqueak] Warning: findStatusItemButton failed; menu bar flash will not render. macOS NSStatusBar internals may have changed.")
         }
         return nil
     }
@@ -116,4 +143,9 @@ struct MenuBarLabel: View {
         }
         return nil
     }
+}
+
+@MainActor
+private enum MenuBarLabelWarningState {
+    static var didWarnLookupFailure = false
 }

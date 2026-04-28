@@ -14,11 +14,9 @@ struct PipSqueakApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        Window("PipSqueak Settings", id: "settings") {
+        Settings {
             SettingsView()
                 .environment(appState)
         }
-        .windowResizability(.contentSize)
-        .defaultPosition(.center)
     }
 }

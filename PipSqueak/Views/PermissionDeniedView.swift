@@ -22,7 +22,7 @@ struct PermissionDeniedView: View {
                     Task {
                         await appState.calendarManager.requestAccess()
                         if appState.calendarManager.authorizationStatus == .fullAccess {
-                            appState.calendarManager.loadCalendars()
+                            appState.onPermissionGranted()
                         }
                     }
                 }

@@ -18,17 +18,33 @@ final class AudioManager: NSObject {
         }
     }
 
+    enum AudioStatus: Equatable {
+        case ok
+        case fallbackToBundled(String)
+        case failed(String)
+    }
+
     var isPlaying: Bool = false
     var volume: Float = 0.7
+    var isMuted: Bool = false
     var isAudioLoaded: Bool = false
     var audioDuration: TimeInterval = 0
+    var audioStatus: AudioStatus = .ok
     private(set) var duckLevel: DuckLevel = .full
+
+    /// Exposed for AppState's stale-meeting cancellation logic.
+    private(set) var scheduledMeetingID: String?
+    private(set) var scheduledMeetingStartDate: Date?
 
     private var player: AVAudioPlayer?
     private var customAudioBookmark: Data?
-    private var wakeObserver: (any NSObjectProtocol)?
-    private var scheduledMeetingID: String?
-    private var scheduledMeetingStartDate: Date?
+    private var pendingFadeWork: DispatchWorkItem?
+
+    /// Effective player volume — accounts for the user's mute toggle without
+    /// destroying the underlying volume value.
+    private var effectiveVolume: Float {
+        isMuted ? 0 : volume
+    }
 
     // The audio is 33 seconds total:
     // - 0:00 to 0:30 = countdown (30 seconds)
@@ -40,67 +56,93 @@ final class AudioManager: NSObject {
 
     func setup() {
         loadBundledAudio()
-        observeWake()
     }
 
     func cleanup() {
-        if let observer = wakeObserver {
-            NSWorkspace.shared.notificationCenter.removeObserver(observer)
-            wakeObserver = nil
-        }
+        // Wake observation lives in AppState now; nothing to tear down here.
     }
 
     func loadBundledAudio() {
         guard let url = Bundle.main.url(forResource: "30second", withExtension: "mp3") else {
             isAudioLoaded = false
+            audioStatus = .failed("Bundled audio file is missing.")
             return
         }
-        loadAudio(from: url)
+        if loadAudio(from: url) {
+            // Only mark .ok if we weren't already showing a fallback message
+            // from an earlier failed custom-audio load.
+            if case .fallbackToBundled = audioStatus {
+                // Preserve the fallback note so the user sees why we reverted.
+            } else {
+                audioStatus = .ok
+            }
+        } else {
+            audioStatus = .failed("Failed to load bundled audio.")
+        }
     }
 
-    func loadCustomAudio(bookmark: Data) {
+    /// Load a custom audio file from a security-scope-free bookmark. If the
+    /// bookmark is stale, the closure is called with regenerated bookmark data
+    /// so the caller (AppState) can persist the refreshed bookmark.
+    func loadCustomAudio(bookmark: Data, regeneratedBookmark: ((Data?) -> Void)? = nil) {
         customAudioBookmark = bookmark
         var isStale = false
-        guard let url = try? URL(resolvingBookmarkData: bookmark, options: .withSecurityScope, bookmarkDataIsStale: &isStale) else {
+        guard let url = try? URL(resolvingBookmarkData: bookmark, options: [], bookmarkDataIsStale: &isStale) else {
+            audioStatus = .fallbackToBundled("Could not resolve saved audio bookmark; using bundled sound.")
             loadBundledAudio()
             return
         }
 
         if isStale {
+            // Try to regenerate the bookmark from the resolved URL before
+            // falling back. This handles ordinary file moves transparently.
+            if let regenerated = try? url.bookmarkData(
+                options: [],
+                includingResourceValuesForKeys: nil,
+                relativeTo: nil
+            ) {
+                customAudioBookmark = regenerated
+                regeneratedBookmark?(regenerated)
+                if loadAudio(from: url) {
+                    audioStatus = .ok
+                    return
+                }
+            }
+            audioStatus = .fallbackToBundled("Saved audio location changed; using bundled sound.")
             loadBundledAudio()
             return
         }
 
-        guard url.startAccessingSecurityScopedResource() else {
+        if loadAudio(from: url) {
+            audioStatus = .ok
+        } else {
+            audioStatus = .fallbackToBundled("Failed to load custom audio file; using bundled sound.")
             loadBundledAudio()
-            return
         }
-        defer { url.stopAccessingSecurityScopedResource() }
-
-        loadAudio(from: url)
     }
 
-    func selectCustomAudio() -> Data? {
-        let panel = NSOpenPanel()
-        panel.allowedContentTypes = [.mp3, .mpeg4Audio, .wav, .aiff]
-        panel.allowsMultipleSelection = false
-        panel.canChooseDirectories = false
-        panel.message = "Select a countdown audio file"
-
-        guard panel.runModal() == .OK, let url = panel.url else { return nil }
-
+    /// Load custom audio directly from a URL the view layer obtained via NSOpenPanel.
+    func loadCustomAudio(from url: URL) -> Data? {
         guard let bookmark = try? url.bookmarkData(
-            options: .withSecurityScope,
+            options: [],
             includingResourceValuesForKeys: nil,
             relativeTo: nil
-        ) else { return nil }
-
-        loadCustomAudio(bookmark: bookmark)
-        return bookmark
+        ) else {
+            audioStatus = .failed("Could not create bookmark for selected file.")
+            return nil
+        }
+        customAudioBookmark = bookmark
+        if loadAudio(from: url) {
+            audioStatus = .ok
+            return bookmark
+        } else {
+            audioStatus = .fallbackToBundled("Failed to load selected audio file; using bundled sound.")
+            loadBundledAudio()
+            return nil
+        }
     }
 
-    func schedulePlayback(for meeting: MeetingEvent, leadInSeconds: TimeInterval, isDNDActive: Bool) {
-        guard !isDNDActive else { return }
+    func schedulePlayback(for meeting: MeetingEvent, leadInSeconds: TimeInterval) {
         guard let player = player else { return }
 
         // If already scheduled for this exact meeting+time, skip
@@ -112,6 +154,10 @@ final class AudioManager: NSObject {
         if scheduledMeetingID != nil {
             cancelPlayback()
         }
+
+        // Cancel any prior pending fade work before scheduling fresh.
+        pendingFadeWork?.cancel()
+        pendingFadeWork = nil
 
         // Defensive: any stale duck state from a prior playback that ended
         // without a clean cancel/finish path is wiped before we start fresh.
@@ -133,18 +179,20 @@ final class AudioManager: NSObject {
             // Schedule future playback using hardware clock for precise timing
             let audioStartPosition = pipsOffset - effectiveLeadIn
             player.currentTime = audioStartPosition
-            player.volume = shouldFadeIn ? 0 : volume
+            player.volume = shouldFadeIn ? 0 : effectiveVolume
             let playTime = player.deviceCurrentTime + secondsUntilPlaybackStart
             player.play(atTime: playTime)
             isPlaying = true
             scheduledMeetingID = meeting.id
             scheduledMeetingStartDate = meeting.startDate
             if shouldFadeIn {
-                // Use AVAudioPlayer's native fade -- schedule it to start when playback begins
-                DispatchQueue.main.asyncAfter(deadline: .now() + secondsUntilPlaybackStart) { [weak self] in
+                // Use AVAudioPlayer's native fade -- schedule it via a cancellable work item
+                let work = DispatchWorkItem { [weak self] in
                     guard let self, self.isPlaying else { return }
-                    self.player?.setVolume(self.volume, fadeDuration: 2.0)
+                    self.player?.setVolume(self.effectiveVolume, fadeDuration: 2.0)
                 }
+                pendingFadeWork = work
+                DispatchQueue.main.asyncAfter(deadline: .now() + secondsUntilPlaybackStart, execute: work)
             }
         } else if secondsUntilPlaybackStart <= 1 && secondsUntilMeeting > 0 {
             // We're at or past the scheduled start -- play immediately from the right position
@@ -153,9 +201,9 @@ final class AudioManager: NSObject {
             if shouldFadeIn {
                 player.volume = 0
                 player.play()
-                player.setVolume(volume, fadeDuration: 2.0)
+                player.setVolume(effectiveVolume, fadeDuration: 2.0)
             } else {
-                player.volume = volume
+                player.volume = effectiveVolume
                 player.play()
             }
             isPlaying = true
@@ -165,6 +213,8 @@ final class AudioManager: NSObject {
     }
 
     func cancelPlayback() {
+        pendingFadeWork?.cancel()
+        pendingFadeWork = nil
         player?.stop()
         player?.currentTime = 0
         finishPlayback()
@@ -172,7 +222,7 @@ final class AudioManager: NSObject {
 
     func updateVolume(_ newVolume: Float) {
         volume = newVolume
-        player?.volume = newVolume
+        player?.volume = effectiveVolume
     }
 
     /// Advance the duck state one step (full → ducked → muted → muted) and
@@ -183,9 +233,9 @@ final class AudioManager: NSObject {
         duckLevel = duckLevel.next
         switch duckLevel {
         case .full:
-            player?.volume = volume
+            player?.volume = effectiveVolume
         case .ducked:
-            player?.volume = volume * duckedFactor
+            player?.volume = effectiveVolume * duckedFactor
         case .muted:
             player?.volume = 0
         }
@@ -193,7 +243,7 @@ final class AudioManager: NSObject {
 
     private func resetDuckState() {
         duckLevel = .full
-        player?.volume = volume
+        player?.volume = effectiveVolume
     }
 
     private func finishPlayback() {
@@ -206,37 +256,26 @@ final class AudioManager: NSObject {
     func previewAudio() {
         guard let player = player else { return }
         player.currentTime = 0
-        player.volume = volume
+        player.volume = effectiveVolume
         player.play()
         isPlaying = true
     }
 
-    private func loadAudio(from url: URL) {
+    /// Returns true on success.
+    @discardableResult
+    private func loadAudio(from url: URL) -> Bool {
         do {
             player = try AVAudioPlayer(contentsOf: url)
             player?.delegate = self
             player?.prepareToPlay()
             isAudioLoaded = true
             audioDuration = player?.duration ?? 0
+            return true
         } catch {
             isAudioLoaded = false
             audioDuration = 0
             player = nil
-        }
-    }
-
-    private func observeWake() {
-        wakeObserver = NSWorkspace.shared.notificationCenter.addObserver(
-            forName: NSWorkspace.didWakeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            Task { @MainActor in
-                guard let self else { return }
-                if self.isPlaying {
-                    self.cancelPlayback()
-                }
-            }
+            return false
         }
     }
 }

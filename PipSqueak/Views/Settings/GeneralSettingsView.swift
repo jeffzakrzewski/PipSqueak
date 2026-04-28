@@ -3,6 +3,9 @@ import SwiftUI
 
 struct GeneralSettingsView: View {
     @Environment(AppState.self) private var appState
+    @State private var isReverting = false
+    @State private var errorMessage: String?
+    @State private var showError = false
 
     var body: some View {
         @Bindable var appState = appState
@@ -20,6 +23,10 @@ struct GeneralSettingsView: View {
                 }
             }
             .onChange(of: appState.launchAtLogin) { _, newValue in
+                if isReverting {
+                    isReverting = false
+                    return
+                }
                 toggleLaunchAtLogin(newValue)
             }
 
@@ -76,6 +83,11 @@ struct GeneralSettingsView: View {
             }
         }
         .padding()
+        .alert("Could not change Launch at Login", isPresented: $showError, presenting: errorMessage) { _ in
+            Button("OK", role: .cancel) {}
+        } message: { message in
+            Text(message)
+        }
     }
 
     private func toggleLaunchAtLogin(_ enabled: Bool) {
@@ -86,7 +98,11 @@ struct GeneralSettingsView: View {
                 try SMAppService.mainApp.unregister()
             }
         } catch {
-            // Revert on failure
+            // Revert the toggle and surface the error.
+            isReverting = true
+            appState.launchAtLogin = !enabled
+            errorMessage = error.localizedDescription
+            showError = true
         }
     }
 }

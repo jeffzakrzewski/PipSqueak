@@ -13,6 +13,7 @@ PipSqueak watches your Calendar, counts down the time until your next meeting in
 - **Stays out of the way.** Respects Do Not Disturb — if DND is on, PipSqueak ducks the audio so it won't blast over a focus session.
 - **Click to join.** Click a meeting in the popover to open its video link directly. Detects Google Meet, Zoom, and the usual suspects.
 - **Multi-profile browser support.** If you live across multiple Chrome / Brave / Firefox profiles (work + personal), PipSqueak can route each meeting to the right profile so you don't land in the wrong Google account.
+  > Note: per-profile launching is currently only verified against **Brave**. Chrome and Firefox are wired up but untested in the wild — please [file an issue](../../issues) if you hit problems on a different browser.
 - **Calendar filtering.** Pick which calendars to watch, hide events without meeting links, or limit the view to today only.
 
 ## Requirements

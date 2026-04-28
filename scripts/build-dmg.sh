@@ -101,9 +101,21 @@ hdiutil create \
   "$DMG_TMP" >/dev/null
 
 echo "==> Mounting DMG to apply window layout"
+# Pre-flight: detach any existing mount with the same volume name so we don't
+# collide with a stale mount from a previous interrupted run.
+hdiutil detach "/Volumes/$VOL_NAME" -force >/dev/null 2>&1 || true
+
 MOUNT_OUTPUT="$(hdiutil attach -readwrite -noverify -noautoopen "$DMG_TMP")"
 DEV_NODE="$(echo "$MOUNT_OUTPUT" | awk '/^\/dev\// {print $1; exit}')"
-MOUNT_POINT="/Volumes/$VOL_NAME"
+[ -n "$DEV_NODE" ] || { echo "ERROR: failed to parse hdiutil attach output"; exit 1; }
+# Parse the mount point from the actual hdiutil output rather than assuming
+# /Volumes/$VOL_NAME — hdiutil renames duplicates ("PipSqueak 1") if a stale
+# mount is still hanging around.
+MOUNT_POINT="$(echo "$MOUNT_OUTPUT" | awk '/Apple_HFS/ {for (i=3; i<=NF; i++) printf "%s%s", $i, (i<NF ? " " : ""); exit}')"
+[ -n "$MOUNT_POINT" ] || MOUNT_POINT="/Volumes/$VOL_NAME"
+
+# Always detach on exit (success, failure, or interrupt) so we don't leak mounts.
+trap 'hdiutil detach "$DEV_NODE" -force >/dev/null 2>&1 || true' EXIT INT TERM
 
 # Give Finder a moment to register the volume.
 sleep 2
@@ -165,7 +177,8 @@ sync
 sleep 2
 
 if [ ! -f "$MOUNT_POINT/.DS_Store" ]; then
-    echo "WARNING: .DS_Store not present — Finder layout may not have persisted."
+    echo "ERROR: .DS_Store not present — Finder layout did not persist."
+    exit 1
 fi
 
 # Copy the volume icon onto the DMG now that Finder is done meddling, then

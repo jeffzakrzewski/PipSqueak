@@ -19,7 +19,9 @@ struct ProfileMappingSettingsView: View {
                 Spacer()
 
                 Button("Refresh") {
-                    appState.browserProfileManager.detectBrowser()
+                    Task {
+                        await appState.browserProfileManager.detectBrowser()
+                    }
                 }
                 .controlSize(.small)
             }
@@ -35,8 +37,8 @@ struct ProfileMappingSettingsView: View {
             Spacer()
         }
         .padding()
-        .onAppear {
-            appState.browserProfileManager.detectBrowser()
+        .task {
+            await appState.browserProfileManager.detectBrowser()
         }
     }
 
@@ -108,7 +110,7 @@ struct ProfileMappingSettingsView: View {
             let profiles = appState.browserProfileManager.profiles
             let currentMapping = appState.browserProfileManager.profileMappings[email]
 
-            Picker("", selection: Binding(
+            Picker("Profile for \(email)", selection: Binding(
                 get: { currentMapping ?? "" },
                 set: { newValue in
                     if newValue.isEmpty {
@@ -130,6 +132,7 @@ struct ProfileMappingSettingsView: View {
                     .tag(profile.id)
                 }
             }
+            .labelsHidden()
             .frame(width: 180)
         }
     }

@@ -1,4 +1,6 @@
+import AppKit
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct AudioSettingsView: View {
     @Environment(AppState.self) private var appState
@@ -13,15 +15,7 @@ struct AudioSettingsView: View {
                     .font(.headline)
 
                 HStack {
-                    if appState.customAudioBookmarkData.isEmpty {
-                        Label("Using default sound", systemImage: "music.note")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        Label("Custom sound loaded", systemImage: "music.note")
-                            .font(.subheadline)
-                            .foregroundStyle(.green)
-                    }
+                    audioStatusLabel
 
                     Spacer()
 
@@ -44,9 +38,7 @@ struct AudioSettingsView: View {
                     .disabled(!appState.audioManager.isAudioLoaded)
 
                     Button("Choose File...") {
-                        if let bookmark = appState.audioManager.selectCustomAudio() {
-                            appState.customAudioBookmarkData = bookmark
-                        }
+                        chooseCustomAudio()
                     }
 
                     if !appState.customAudioBookmarkData.isEmpty {
@@ -78,7 +70,6 @@ struct AudioSettingsView: View {
                 Picker("Lead-in duration", selection: $appState.leadInDuration) {
                     Text("15 seconds").tag(15.0)
                     Text("30 seconds").tag(30.0)
-                    Text("60 seconds").tag(60.0)
                 }
                 .pickerStyle(.radioGroup)
 
@@ -105,6 +96,44 @@ struct AudioSettingsView: View {
             Spacer()
         }
         .padding()
+    }
+
+    @ViewBuilder
+    private var audioStatusLabel: some View {
+        switch appState.audioManager.audioStatus {
+        case .ok:
+            if appState.customAudioBookmarkData.isEmpty {
+                Label("Using default sound", systemImage: "music.note")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                Label("Custom sound loaded", systemImage: "music.note")
+                    .font(.subheadline)
+                    .foregroundStyle(.green)
+            }
+        case .fallbackToBundled(let reason):
+            Label(reason, systemImage: "exclamationmark.triangle.fill")
+                .font(.subheadline)
+                .foregroundStyle(.orange)
+        case .failed(let reason):
+            Label(reason, systemImage: "xmark.octagon.fill")
+                .font(.subheadline)
+                .foregroundStyle(.red)
+        }
+    }
+
+    private func chooseCustomAudio() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.mp3, .mpeg4Audio, .wav, .aiff]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.message = "Select a countdown audio file"
+
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        if let bookmark = appState.audioManager.loadCustomAudio(from: url) {
+            appState.customAudioBookmarkData = bookmark
+        }
     }
 
     private func formatDuration(_ seconds: TimeInterval) -> String {

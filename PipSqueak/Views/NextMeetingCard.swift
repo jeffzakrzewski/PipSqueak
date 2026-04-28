@@ -51,7 +51,7 @@ struct NextMeetingCard: View {
                         .font(.title2)
                     } else {
                         Label {
-                            Text(formatRemaining(remaining))
+                            Text(MeetingTimeFormatter.format(remaining, style: .colon))
                                 .monospacedDigit()
                         } icon: {
                             Image(systemName: "clock")
@@ -78,21 +78,11 @@ struct NextMeetingCard: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.small)
+                    .accessibilityLabel("Join \(meeting.title)")
                 }
             }
         }
         .padding(12)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
-    }
-
-    private func formatRemaining(_ totalSeconds: Int) -> String {
-        let hours = totalSeconds / 3600
-        let minutes = (totalSeconds % 3600) / 60
-        let seconds = totalSeconds % 60
-
-        if hours > 0 {
-            return String(format: "%dh %dm", hours, minutes)
-        }
-        return String(format: "%d:%02d", minutes, seconds)
     }
 }

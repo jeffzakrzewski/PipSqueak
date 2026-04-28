@@ -2,7 +2,6 @@ import SwiftUI
 
 struct PopoverView: View {
     @Environment(AppState.self) private var appState
-    @Environment(\.openWindow) private var openWindow
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -105,12 +104,15 @@ struct PopoverView: View {
     private var bottomBar: some View {
         HStack {
             Button {
-                appState.audioManager.updateVolume(appState.audioManager.volume > 0 ? 0 : Float(appState.audioVolume))
+                appState.audioManager.isMuted.toggle()
+                // Re-apply effective volume to the player.
+                appState.audioManager.updateVolume(Float(appState.audioVolume))
             } label: {
-                Image(systemName: appState.audioManager.volume > 0 ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                Image(systemName: appState.audioManager.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
             }
             .buttonStyle(.borderless)
-            .help(appState.audioManager.volume > 0 ? "Mute" : "Unmute")
+            .help(appState.audioManager.isMuted ? "Unmute" : "Mute")
+            .accessibilityLabel(appState.audioManager.isMuted ? "Unmute audio" : "Mute audio")
 
             Spacer()
 
@@ -134,6 +136,9 @@ struct PopoverView: View {
     private func showSettings() {
         dismiss()
         NSApp.activate(ignoringOtherApps: true)
-        openWindow(id: "settings")
+        // showSettingsWindow: was added on macOS 14; older SDKs only know
+        // showPreferencesWindow:. We send via string selector so the call
+        // works regardless of which SDK is compiling.
+        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
     }
 }
