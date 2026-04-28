@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct LiftMeApp: App {
+struct PipSqueakApp: App {
     @State private var appState = AppState()
 
     var body: some Scene {
@@ -14,7 +14,7 @@ struct LiftMeApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        Window("LiftMe Settings", id: "settings") {
+        Window("PipSqueak Settings", id: "settings") {
             SettingsView()
                 .environment(appState)
         }

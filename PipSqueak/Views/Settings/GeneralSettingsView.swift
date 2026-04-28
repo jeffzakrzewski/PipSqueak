@@ -14,7 +14,7 @@ struct GeneralSettingsView: View {
             Toggle(isOn: $appState.launchAtLogin) {
                 VStack(alignment: .leading) {
                     Text("Launch at Login")
-                    Text("Start LiftMe automatically when you log in")
+                    Text("Start PipSqueak automatically when you log in")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -53,7 +53,7 @@ struct GeneralSettingsView: View {
             Divider()
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("About LiftMe")
+                Text("About PipSqueak")
                     .font(.subheadline)
                     .fontWeight(.semibold)
 
@@ -70,7 +70,7 @@ struct GeneralSettingsView: View {
 
             HStack {
                 Spacer()
-                Button("Quit LiftMe") {
+                Button("Quit PipSqueak") {
                     NSApplication.shared.terminate(nil)
                 }
             }

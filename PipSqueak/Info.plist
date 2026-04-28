@@ -21,8 +21,8 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>LiftMe needs access to your calendars to show countdown timers before your meetings.</string>
+	<string>PipSqueak needs access to your calendars to show countdown timers before your meetings.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>LiftMe needs access to your calendars to show countdown timers before your meetings.</string>
+	<string>PipSqueak needs access to your calendars to show countdown timers before your meetings.</string>
 </dict>
 </plist>

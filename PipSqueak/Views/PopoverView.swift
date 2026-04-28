@@ -122,7 +122,7 @@ struct PopoverView: View {
             Divider()
                 .frame(height: 16)
 
-            Button("Quit LiftMe") {
+            Button("Quit PipSqueak") {
                 NSApplication.shared.terminate(nil)
             }
             .buttonStyle(.borderless)

@@ -78,12 +78,12 @@ final class BrowserProfileManager {
         guard let email = calendarAccountEmail,
               let profileID = profileMappings[email],
               defaultBrowser.supportsProfiles else {
-            print("[LiftMe] No profile mapping for '\(calendarAccountEmail ?? "nil")' — mappings: \(profileMappings), browser: \(defaultBrowser.rawValue), supportsProfiles: \(defaultBrowser.supportsProfiles)")
+            print("[PipSqueak] No profile mapping for '\(calendarAccountEmail ?? "nil")' — mappings: \(profileMappings), browser: \(defaultBrowser.rawValue), supportsProfiles: \(defaultBrowser.supportsProfiles)")
             NSWorkspace.shared.open(url)
             return
         }
 
-        print("[LiftMe] Launching in profile '\(profileID)' for account '\(email)' in \(defaultBrowser.rawValue)")
+        print("[PipSqueak] Launching in profile '\(profileID)' for account '\(email)' in \(defaultBrowser.rawValue)")
 
         switch defaultBrowser {
         case .chrome, .brave:
@@ -205,7 +205,7 @@ final class BrowserProfileManager {
         let binaryPath = "/Applications/\(browserName).app/Contents/MacOS/\(browserName)"
         let args = ["--profile-directory=\(profileDirectory)", url.absoluteString]
 
-        print("[LiftMe] Exec: \(binaryPath) \(args.joined(separator: " "))")
+        print("[PipSqueak] Exec: \(binaryPath) \(args.joined(separator: " "))")
 
         let process = Process()
         process.executableURL = URL(fileURLWithPath: binaryPath)
@@ -215,7 +215,7 @@ final class BrowserProfileManager {
         do {
             try process.run()
         } catch {
-            print("[LiftMe] Direct binary failed: \(error), trying open -na")
+            print("[PipSqueak] Direct binary failed: \(error), trying open -na")
             // Fallback to open -na
             let fallback = Process()
             fallback.executableURL = URL(fileURLWithPath: "/usr/bin/open")
@@ -223,7 +223,7 @@ final class BrowserProfileManager {
             do {
                 try fallback.run()
             } catch {
-                print("[LiftMe] open -na also failed: \(error)")
+                print("[PipSqueak] open -na also failed: \(error)")
                 NSWorkspace.shared.open(url)
             }
         }

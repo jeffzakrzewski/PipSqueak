@@ -22,7 +22,7 @@
 		72B498BA4FC41D10AD56389D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20003417553CE530E2E893C /* GeneralSettingsView.swift */; };
 		75560D7C4535BC72870338A4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45118B30515B5790027BBE55 /* AppState.swift */; };
 		77FDBCB4FD25402E5FE42B79 /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */; };
-		82CE4B3AC51867CCBAD08D6A /* LiftMeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D021FE468EA1A6D719E8D9A /* LiftMeApp.swift */; };
+		82CE4B3AC51867CCBAD08D6A /* PipSqueakApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D021FE468EA1A6D719E8D9A /* PipSqueakApp.swift */; };
 		84C4B6816F651D50147CFCEF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F261C5EDE09B4A1FC75210B /* SettingsView.swift */; };
 		C14565DA4325D852CC8F3A6C /* ProfileMappingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA66EB90B34A4FD2996D8DC /* ProfileMappingSettingsView.swift */; };
 		C5DC1BF7300996EEF2F7DE2F /* MeetingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51627A9F83D3706942E33EA7 /* MeetingEvent.swift */; };
@@ -41,10 +41,10 @@
 		45118B30515B5790027BBE55 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		51627A9F83D3706942E33EA7 /* MeetingEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingEvent.swift; sourceTree = "<group>"; };
 		6776EA7D62990E00AD80365C /* 30second.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 30second.mp3; sourceTree = "<group>"; };
-		6D021FE468EA1A6D719E8D9A /* LiftMeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftMeApp.swift; sourceTree = "<group>"; };
+		6D021FE468EA1A6D719E8D9A /* PipSqueakApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipSqueakApp.swift; sourceTree = "<group>"; };
 		7BBB19C02612AEAC8EB30394 /* MenuBarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLabel.swift; sourceTree = "<group>"; };
 		9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionDeniedView.swift; sourceTree = "<group>"; };
-		A1160FDC89EB534F90BF9282 /* LiftMe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LiftMe.entitlements; sourceTree = "<group>"; };
+		A1160FDC89EB534F90BF9282 /* PipSqueak.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PipSqueak.entitlements; sourceTree = "<group>"; };
 		A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
 		A599575874DD1C2F3A41E800 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsView.swift; sourceTree = "<group>"; };
@@ -52,14 +52,14 @@
 		DEA66EB90B34A4FD2996D8DC /* ProfileMappingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMappingSettingsView.swift; sourceTree = "<group>"; };
 		E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownManager.swift; sourceTree = "<group>"; };
 		E59F1A05389070D934DD317C /* RecentMeetingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMeetingsList.swift; sourceTree = "<group>"; };
-		F89E8C630FE9CEB6941E4BC0 /* LiftMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiftMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F89E8C630FE9CEB6941E4BC0 /* PipSqueak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PipSqueak.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		244D7F79B879D94A7B9773B6 = {
 			isa = PBXGroup;
 			children = (
-				E549FDD3B456E68AFDDDBFC6 /* LiftMe */,
+				E549FDD3B456E68AFDDDBFC6 /* PipSqueak */,
 				819F347EB22C9B6D41F5D2B9 /* Resources */,
 				37E886C57EE9C4FFBF431241 /* Products */,
 			);
@@ -68,7 +68,7 @@
 		37E886C57EE9C4FFBF431241 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F89E8C630FE9CEB6941E4BC0 /* LiftMe.app */,
+				F89E8C630FE9CEB6941E4BC0 /* PipSqueak.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,7 +87,7 @@
 				6776EA7D62990E00AD80365C /* 30second.mp3 */,
 			);
 			name = Resources;
-			path = LiftMe/Resources;
+			path = PipSqueak/Resources;
 			sourceTree = "<group>";
 		};
 		85643571F182169BC303A89C /* Settings */ = {
@@ -129,25 +129,25 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
-		E549FDD3B456E68AFDDDBFC6 /* LiftMe */ = {
+		E549FDD3B456E68AFDDDBFC6 /* PipSqueak */ = {
 			isa = PBXGroup;
 			children = (
 				2B52CD4BE2420F309445FD97 /* Info.plist */,
-				A1160FDC89EB534F90BF9282 /* LiftMe.entitlements */,
-				6D021FE468EA1A6D719E8D9A /* LiftMeApp.swift */,
+				A1160FDC89EB534F90BF9282 /* PipSqueak.entitlements */,
+				6D021FE468EA1A6D719E8D9A /* PipSqueakApp.swift */,
 				E4656DBF3A21347ED3ECE882 /* Managers */,
 				3954F4638B9B1BD4D8B1D755 /* Models */,
 				91FD3F97FC5A82CCE127F0D8 /* Views */,
 			);
-			path = LiftMe;
+			path = PipSqueak;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FD4526D8604FD276C40E6410 /* LiftMe */ = {
+		FD4526D8604FD276C40E6410 /* PipSqueak */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D04A34AF364AC5DEC9550A87 /* Build configuration list for PBXNativeTarget "LiftMe" */;
+			buildConfigurationList = D04A34AF364AC5DEC9550A87 /* Build configuration list for PBXNativeTarget "PipSqueak" */;
 			buildPhases = (
 				1A5E6F4BF9ACA01746FE13F1 /* Sources */,
 				3FFB326F6DEC68D35F136325 /* Resources */,
@@ -156,11 +156,11 @@
 			);
 			dependencies = (
 			);
-			name = LiftMe;
+			name = PipSqueak;
 			packageProductDependencies = (
 			);
-			productName = LiftMe;
-			productReference = F89E8C630FE9CEB6941E4BC0 /* LiftMe.app */;
+			productName = PipSqueak;
+			productReference = F89E8C630FE9CEB6941E4BC0 /* PipSqueak.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -174,7 +174,7 @@
 				TargetAttributes = {
 				};
 			};
-			buildConfigurationList = 5725F03E449673F243AB7D46 /* Build configuration list for PBXProject "LiftMe" */;
+			buildConfigurationList = 5725F03E449673F243AB7D46 /* Build configuration list for PBXProject "PipSqueak" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -188,7 +188,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FD4526D8604FD276C40E6410 /* LiftMe */,
+				FD4526D8604FD276C40E6410 /* PipSqueak */,
 			);
 		};
 /* End PBXProject section */
@@ -217,7 +217,7 @@
 				77FDBCB4FD25402E5FE42B79 /* CalendarSettingsView.swift in Sources */,
 				3E7DDE849BAF938C2446EA51 /* CountdownManager.swift in Sources */,
 				72B498BA4FC41D10AD56389D /* GeneralSettingsView.swift in Sources */,
-				82CE4B3AC51867CCBAD08D6A /* LiftMeApp.swift in Sources */,
+				82CE4B3AC51867CCBAD08D6A /* PipSqueakApp.swift in Sources */,
 				C5DC1BF7300996EEF2F7DE2F /* MeetingEvent.swift in Sources */,
 				0554EF8B8A25BDB16B224C38 /* MenuBarLabel.swift in Sources */,
 				5804977A99219FBB0E7C8EB7 /* NextMeetingCard.swift in Sources */,
@@ -303,16 +303,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = LiftMe/LiftMe.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PipSqueak/PipSqueak.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = LiftMe/Info.plist;
+				INFOPLIST_FILE = PipSqueak/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.liftme.LiftMe;
-				PRODUCT_NAME = LiftMe;
+				PRODUCT_BUNDLE_IDENTIFIER = ca.zakr.PipSqueak;
+				PRODUCT_NAME = PipSqueak;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -379,16 +379,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = LiftMe/LiftMe.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PipSqueak/PipSqueak.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = LiftMe/Info.plist;
+				INFOPLIST_FILE = PipSqueak/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.liftme.LiftMe;
-				PRODUCT_NAME = LiftMe;
+				PRODUCT_BUNDLE_IDENTIFIER = ca.zakr.PipSqueak;
+				PRODUCT_NAME = PipSqueak;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -396,7 +396,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5725F03E449673F243AB7D46 /* Build configuration list for PBXProject "LiftMe" */ = {
+		5725F03E449673F243AB7D46 /* Build configuration list for PBXProject "PipSqueak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5E33CA42C9BC7BAC97FB163C /* Debug */,
@@ -405,7 +405,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		D04A34AF364AC5DEC9550A87 /* Build configuration list for PBXNativeTarget "LiftMe" */ = {
+		D04A34AF364AC5DEC9550A87 /* Build configuration list for PBXNativeTarget "PipSqueak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F9BBD876B83F5474C7DDE708 /* Debug */,

@@ -12,7 +12,7 @@ struct PermissionDeniedView: View {
             Text("Calendar Access Required")
                 .font(.headline)
 
-            Text("LiftMe needs access to your calendars to show meeting countdowns.")
+            Text("PipSqueak needs access to your calendars to show meeting countdowns.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -35,7 +35,7 @@ struct PermissionDeniedView: View {
                 }
                 .buttonStyle(.borderedProminent)
 
-                Text("Enable LiftMe in System Settings > Privacy & Security > Calendars")
+                Text("Enable PipSqueak in System Settings > Privacy & Security > Calendars")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
                     .multilineTextAlignment(.center)

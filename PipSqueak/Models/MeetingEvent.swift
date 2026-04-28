@@ -121,7 +121,7 @@ struct MeetingLink {
             )
         case .googleMeet:
             let meetURL = Self.appendAuthUser(to: url, email: calendarAccountEmail)
-            print("[LiftMe] Meet launch — account: '\(calendarAccountEmail ?? "nil")', manager: \(browserProfileManager != nil), mappings: \(browserProfileManager?.profileMappings ?? [:])")
+            print("[PipSqueak] Meet launch — account: '\(calendarAccountEmail ?? "nil")', manager: \(browserProfileManager != nil), mappings: \(browserProfileManager?.profileMappings ?? [:])")
             // Use browser profile if mapped, otherwise default browser
             if let manager = browserProfileManager,
                let email = calendarAccountEmail,
