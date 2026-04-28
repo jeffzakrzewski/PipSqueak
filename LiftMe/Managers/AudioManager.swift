@@ -5,11 +5,24 @@ import UniformTypeIdentifiers
 
 @MainActor
 @Observable
-final class AudioManager {
+final class AudioManager: NSObject {
+    enum DuckLevel {
+        case full, ducked, muted
+
+        var next: DuckLevel {
+            switch self {
+            case .full: return .ducked
+            case .ducked: return .muted
+            case .muted: return .muted
+            }
+        }
+    }
+
     var isPlaying: Bool = false
     var volume: Float = 0.7
     var isAudioLoaded: Bool = false
     var audioDuration: TimeInterval = 0
+    private(set) var duckLevel: DuckLevel = .full
 
     private var player: AVAudioPlayer?
     private var customAudioBookmark: Data?
@@ -23,6 +36,7 @@ final class AudioManager {
     // - 0:30 to 0:33 = tail-off
     // So playback starts 30 seconds before meeting time.
     private let pipsOffset: TimeInterval = 30.0
+    private let duckedFactor: Float = 0.2
 
     func setup() {
         loadBundledAudio()
@@ -99,6 +113,10 @@ final class AudioManager {
             cancelPlayback()
         }
 
+        // Defensive: any stale duck state from a prior playback that ended
+        // without a clean cancel/finish path is wiped before we start fresh.
+        resetDuckState()
+
         let secondsUntilMeeting = meeting.startDate.timeIntervalSinceNow
         guard secondsUntilMeeting > 0 else { return }
 
@@ -149,14 +167,40 @@ final class AudioManager {
     func cancelPlayback() {
         player?.stop()
         player?.currentTime = 0
-        isPlaying = false
-        scheduledMeetingID = nil
-        scheduledMeetingStartDate = nil
+        finishPlayback()
     }
 
     func updateVolume(_ newVolume: Float) {
         volume = newVolume
         player?.volume = newVolume
+    }
+
+    /// Advance the duck state one step (full → ducked → muted → muted) and
+    /// apply the resulting volume directly to the underlying player without
+    /// touching `self.volume`. No-op when audio is not currently playing.
+    func advanceDuckIfPlaying() {
+        guard isPlaying else { return }
+        duckLevel = duckLevel.next
+        switch duckLevel {
+        case .full:
+            player?.volume = volume
+        case .ducked:
+            player?.volume = volume * duckedFactor
+        case .muted:
+            player?.volume = 0
+        }
+    }
+
+    private func resetDuckState() {
+        duckLevel = .full
+        player?.volume = volume
+    }
+
+    private func finishPlayback() {
+        isPlaying = false
+        scheduledMeetingID = nil
+        scheduledMeetingStartDate = nil
+        resetDuckState()
     }
 
     func previewAudio() {
@@ -170,6 +214,7 @@ final class AudioManager {
     private func loadAudio(from url: URL) {
         do {
             player = try AVAudioPlayer(contentsOf: url)
+            player?.delegate = self
             player?.prepareToPlay()
             isAudioLoaded = true
             audioDuration = player?.duration ?? 0
@@ -192,6 +237,14 @@ final class AudioManager {
                     self.cancelPlayback()
                 }
             }
+        }
+    }
+}
+
+extension AudioManager: AVAudioPlayerDelegate {
+    nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        Task { @MainActor [weak self] in
+            self?.finishPlayback()
         }
     }
 }

@@ -23,6 +23,12 @@ struct PopoverView: View {
         }
         .frame(width: 320)
         .padding(.vertical, 8)
+        // Advance the AudioManager duck state on every popover presentation
+        // (full → ducked → muted). Relies on `.menuBarExtraStyle(.window)`
+        // firing onAppear per open. No-op when audio isn't playing.
+        .onAppear {
+            appState.audioManager.advanceDuckIfPlaying()
+        }
     }
 
     private var onboardingView: some View {
