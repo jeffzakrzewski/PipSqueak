@@ -23,6 +23,7 @@ build/
 
 # Swift Package Manager
 .build/
+dist/
 Packages/
 Package.resolved
 

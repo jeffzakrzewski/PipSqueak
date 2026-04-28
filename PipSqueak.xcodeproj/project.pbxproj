@@ -7,150 +7,153 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0554EF8B8A25BDB16B224C38 /* MenuBarLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBB19C02612AEAC8EB30394 /* MenuBarLabel.swift */; };
-		07C8C9E022A95E1E8A493F8D /* PermissionDeniedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */; };
-		0A80EACF691BAECE9D506191 /* TimerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */; };
-		0C4CB7728155351E2762DC33 /* BrowserProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D564CEC6603638DE3FD1954 /* BrowserProfileManager.swift */; };
-		1A41045D58F481A50104B759 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427F9413882F4AB54DABACDD /* CalendarManager.swift */; };
-		2E3266538587838FB0F66108 /* UpcomingMeetingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */; };
-		3E7DDE849BAF938C2446EA51 /* CountdownManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */; };
-		520DE89D88E68137C2415925 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D269FFE32D873C2EE320B59 /* PopoverView.swift */; };
-		5450E668241A23486344F1B6 /* 30second.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6776EA7D62990E00AD80365C /* 30second.mp3 */; };
-		5804977A99219FBB0E7C8EB7 /* NextMeetingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F26562EE0B2CE0921C6874 /* NextMeetingCard.swift */; };
-		5E0E1D0F01DF18F10BAC7D62 /* RecentMeetingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59F1A05389070D934DD317C /* RecentMeetingsList.swift */; };
-		698FDFAE1B4B0D9D45210BA5 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A599575874DD1C2F3A41E800 /* AudioManager.swift */; };
-		72B498BA4FC41D10AD56389D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20003417553CE530E2E893C /* GeneralSettingsView.swift */; };
-		75560D7C4535BC72870338A4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45118B30515B5790027BBE55 /* AppState.swift */; };
-		77FDBCB4FD25402E5FE42B79 /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */; };
-		82CE4B3AC51867CCBAD08D6A /* PipSqueakApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D021FE468EA1A6D719E8D9A /* PipSqueakApp.swift */; };
-		84C4B6816F651D50147CFCEF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F261C5EDE09B4A1FC75210B /* SettingsView.swift */; };
-		C14565DA4325D852CC8F3A6C /* ProfileMappingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA66EB90B34A4FD2996D8DC /* ProfileMappingSettingsView.swift */; };
-		C5DC1BF7300996EEF2F7DE2F /* MeetingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51627A9F83D3706942E33EA7 /* MeetingEvent.swift */; };
-		D9E08DEA2077103E1AD5E1AD /* AudioSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6CE62B9F468412786574C /* AudioSettingsView.swift */; };
+		014EB684D5A2BC38FD818162 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E1760EDB93FD1CFE61D8515 /* Assets.xcassets */; };
+		0C8078FCE434D5D4E890B762 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4741AAED6A2B125B24B9CF3D /* SettingsView.swift */; };
+		1938E5E7CAFC7EFC7CE85560 /* BrowserProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6997774073BE7004E8F73934 /* BrowserProfileManager.swift */; };
+		332A21ED14F0AA438B23E331 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3DD6CC7294B4F4CA081BF0 /* PopoverView.swift */; };
+		43836535C7AA79A40A9B7671 /* ProfileMappingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB2AA5C13BC14D23B07DB23 /* ProfileMappingSettingsView.swift */; };
+		465852B1E9554282C500FD70 /* MeetingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2E43B30BF5DE9A297F1933 /* MeetingEvent.swift */; };
+		53685D7F85259631DD82EB7A /* MenuBarLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B01FA8747224A2BD41C90D /* MenuBarLabel.swift */; };
+		5563149DF16348C2BD22B8E0 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B0AAF5A25C12D5F6832583 /* AudioManager.swift */; };
+		5885978570027113A1F969C8 /* AudioSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BD0B96DCB42761D7BADEBB /* AudioSettingsView.swift */; };
+		644CC7C02BA12D48002CAE57 /* PipSqueakApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D1A3CE83F6E294D16DF5BD /* PipSqueakApp.swift */; };
+		67B09083C7BD34A2BFCE86E7 /* UpcomingMeetingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E580A7656C3B500C60E275 /* UpcomingMeetingsList.swift */; };
+		80FFC66C08F6C180F83BE65B /* NextMeetingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8881E43219360DD6A6AE1529 /* NextMeetingCard.swift */; };
+		818F724CB626D2A035A36136 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD49A37AC23A6BC62915FA1 /* GeneralSettingsView.swift */; };
+		8BC0480861CF5FA173A0BD49 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807F9D0A01232736EC8A2823 /* AppState.swift */; };
+		96704CEB6BC9DD61828314B9 /* TimerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986B7D9BD49FA9AF4A1D1AC0 /* TimerSettingsView.swift */; };
+		985EB87685966C558CC993B5 /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F76EAAD0D1EF3AA6082B76F /* CalendarSettingsView.swift */; };
+		A0F6977DC6273C8D09ADA8BF /* RecentMeetingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1ED84AAC19543E65D6E18F5 /* RecentMeetingsList.swift */; };
+		ACC4C26BFB5D9FB2FE0ABF93 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C49DAD0FC975D1D32BEFCA /* CalendarManager.swift */; };
+		C942D8D2469A75A4CFFAC75F /* CountdownManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CA15796A938F25F1912568 /* CountdownManager.swift */; };
+		EE6624BFED6A0A8B81ED74B3 /* 30second.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5B94B83A2A7A7B0E4033E197 /* 30second.mp3 */; };
+		F0BDDC12310A7A0F6F1713F5 /* PermissionDeniedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB9D2D38AF848140DEE53EC /* PermissionDeniedView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		04A6CE62B9F468412786574C /* AudioSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSettingsView.swift; sourceTree = "<group>"; };
-		1F261C5EDE09B4A1FC75210B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		2B52CD4BE2420F309445FD97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		2D269FFE32D873C2EE320B59 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
-		3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingMeetingsList.swift; sourceTree = "<group>"; };
-		3D564CEC6603638DE3FD1954 /* BrowserProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserProfileManager.swift; sourceTree = "<group>"; };
-		41F26562EE0B2CE0921C6874 /* NextMeetingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextMeetingCard.swift; sourceTree = "<group>"; };
-		427F9413882F4AB54DABACDD /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
-		45118B30515B5790027BBE55 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		51627A9F83D3706942E33EA7 /* MeetingEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingEvent.swift; sourceTree = "<group>"; };
-		6776EA7D62990E00AD80365C /* 30second.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 30second.mp3; sourceTree = "<group>"; };
-		6D021FE468EA1A6D719E8D9A /* PipSqueakApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipSqueakApp.swift; sourceTree = "<group>"; };
-		7BBB19C02612AEAC8EB30394 /* MenuBarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLabel.swift; sourceTree = "<group>"; };
-		9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionDeniedView.swift; sourceTree = "<group>"; };
-		A1160FDC89EB534F90BF9282 /* PipSqueak.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PipSqueak.entitlements; sourceTree = "<group>"; };
-		A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
-		A599575874DD1C2F3A41E800 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
-		AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsView.swift; sourceTree = "<group>"; };
-		B20003417553CE530E2E893C /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
-		DEA66EB90B34A4FD2996D8DC /* ProfileMappingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMappingSettingsView.swift; sourceTree = "<group>"; };
-		E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownManager.swift; sourceTree = "<group>"; };
-		E59F1A05389070D934DD317C /* RecentMeetingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMeetingsList.swift; sourceTree = "<group>"; };
-		F89E8C630FE9CEB6941E4BC0 /* PipSqueak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PipSqueak.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F76EAAD0D1EF3AA6082B76F /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
+		2BB2AA5C13BC14D23B07DB23 /* ProfileMappingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMappingSettingsView.swift; sourceTree = "<group>"; };
+		4741AAED6A2B125B24B9CF3D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		4A128F8323CE3940A9B1C9AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		57CA15796A938F25F1912568 /* CountdownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownManager.swift; sourceTree = "<group>"; };
+		5B94B83A2A7A7B0E4033E197 /* 30second.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 30second.mp3; sourceTree = "<group>"; };
+		6997774073BE7004E8F73934 /* BrowserProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserProfileManager.swift; sourceTree = "<group>"; };
+		6CB9D2D38AF848140DEE53EC /* PermissionDeniedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionDeniedView.swift; sourceTree = "<group>"; };
+		6E1760EDB93FD1CFE61D8515 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		78B0AAF5A25C12D5F6832583 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		807F9D0A01232736EC8A2823 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		80C49DAD0FC975D1D32BEFCA /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
+		8881E43219360DD6A6AE1529 /* NextMeetingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextMeetingCard.swift; sourceTree = "<group>"; };
+		8C3DD6CC7294B4F4CA081BF0 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
+		986B7D9BD49FA9AF4A1D1AC0 /* TimerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsView.swift; sourceTree = "<group>"; };
+		A3B01FA8747224A2BD41C90D /* MenuBarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLabel.swift; sourceTree = "<group>"; };
+		A8BD0B96DCB42761D7BADEBB /* AudioSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSettingsView.swift; sourceTree = "<group>"; };
+		AB2E43B30BF5DE9A297F1933 /* MeetingEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingEvent.swift; sourceTree = "<group>"; };
+		B3E580A7656C3B500C60E275 /* UpcomingMeetingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingMeetingsList.swift; sourceTree = "<group>"; };
+		CD1101ED57D6751280B0C3CA /* PipSqueak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PipSqueak.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1ED84AAC19543E65D6E18F5 /* RecentMeetingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMeetingsList.swift; sourceTree = "<group>"; };
+		DFD49A37AC23A6BC62915FA1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		E8FAE7306196C5FC204924B8 /* PipSqueak.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PipSqueak.entitlements; sourceTree = "<group>"; };
+		F4D1A3CE83F6E294D16DF5BD /* PipSqueakApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipSqueakApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		244D7F79B879D94A7B9773B6 = {
+		596E74A1EE833E3BBFA66F5F /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E549FDD3B456E68AFDDDBFC6 /* PipSqueak */,
-				819F347EB22C9B6D41F5D2B9 /* Resources */,
-				37E886C57EE9C4FFBF431241 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		37E886C57EE9C4FFBF431241 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F89E8C630FE9CEB6941E4BC0 /* PipSqueak.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		3954F4638B9B1BD4D8B1D755 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				51627A9F83D3706942E33EA7 /* MeetingEvent.swift */,
+				AB2E43B30BF5DE9A297F1933 /* MeetingEvent.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		819F347EB22C9B6D41F5D2B9 /* Resources */ = {
+		6822C503F87D84B05A0A0718 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6776EA7D62990E00AD80365C /* 30second.mp3 */,
+				5B94B83A2A7A7B0E4033E197 /* 30second.mp3 */,
+				6E1760EDB93FD1CFE61D8515 /* Assets.xcassets */,
 			);
 			name = Resources;
 			path = PipSqueak/Resources;
 			sourceTree = "<group>";
 		};
-		85643571F182169BC303A89C /* Settings */ = {
+		79218A07CF5F8468E4F7708F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				04A6CE62B9F468412786574C /* AudioSettingsView.swift */,
-				A4FBD89006A006D6DA5FE279 /* CalendarSettingsView.swift */,
-				B20003417553CE530E2E893C /* GeneralSettingsView.swift */,
-				DEA66EB90B34A4FD2996D8DC /* ProfileMappingSettingsView.swift */,
-				1F261C5EDE09B4A1FC75210B /* SettingsView.swift */,
-				AE16D443804E5C0AA9DA2A44 /* TimerSettingsView.swift */,
+				CD1101ED57D6751280B0C3CA /* PipSqueak.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AE3FB6E5C9CFAB9386138A19 = {
+			isa = PBXGroup;
+			children = (
+				B4E15C1EA0CFE1A9652791B5 /* PipSqueak */,
+				6822C503F87D84B05A0A0718 /* Resources */,
+				79218A07CF5F8468E4F7708F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B4E15C1EA0CFE1A9652791B5 /* PipSqueak */ = {
+			isa = PBXGroup;
+			children = (
+				4A128F8323CE3940A9B1C9AC /* Info.plist */,
+				E8FAE7306196C5FC204924B8 /* PipSqueak.entitlements */,
+				F4D1A3CE83F6E294D16DF5BD /* PipSqueakApp.swift */,
+				DADABAC07D28923ACE98711C /* Managers */,
+				596E74A1EE833E3BBFA66F5F /* Models */,
+				E8E63E82B4D70E50A7D7A7DF /* Views */,
+			);
+			path = PipSqueak;
+			sourceTree = "<group>";
+		};
+		D73BA9F7E19902A7BC0205E6 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A8BD0B96DCB42761D7BADEBB /* AudioSettingsView.swift */,
+				0F76EAAD0D1EF3AA6082B76F /* CalendarSettingsView.swift */,
+				DFD49A37AC23A6BC62915FA1 /* GeneralSettingsView.swift */,
+				2BB2AA5C13BC14D23B07DB23 /* ProfileMappingSettingsView.swift */,
+				4741AAED6A2B125B24B9CF3D /* SettingsView.swift */,
+				986B7D9BD49FA9AF4A1D1AC0 /* TimerSettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		91FD3F97FC5A82CCE127F0D8 /* Views */ = {
+		DADABAC07D28923ACE98711C /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				7BBB19C02612AEAC8EB30394 /* MenuBarLabel.swift */,
-				41F26562EE0B2CE0921C6874 /* NextMeetingCard.swift */,
-				9BEAA059F6F8E8746188A73E /* PermissionDeniedView.swift */,
-				2D269FFE32D873C2EE320B59 /* PopoverView.swift */,
-				E59F1A05389070D934DD317C /* RecentMeetingsList.swift */,
-				3A91FE5E9FE8F64F92156B48 /* UpcomingMeetingsList.swift */,
-				85643571F182169BC303A89C /* Settings */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		E4656DBF3A21347ED3ECE882 /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				45118B30515B5790027BBE55 /* AppState.swift */,
-				A599575874DD1C2F3A41E800 /* AudioManager.swift */,
-				3D564CEC6603638DE3FD1954 /* BrowserProfileManager.swift */,
-				427F9413882F4AB54DABACDD /* CalendarManager.swift */,
-				E0BACA7DA6FF9C1261C06243 /* CountdownManager.swift */,
+				807F9D0A01232736EC8A2823 /* AppState.swift */,
+				78B0AAF5A25C12D5F6832583 /* AudioManager.swift */,
+				6997774073BE7004E8F73934 /* BrowserProfileManager.swift */,
+				80C49DAD0FC975D1D32BEFCA /* CalendarManager.swift */,
+				57CA15796A938F25F1912568 /* CountdownManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
 		};
-		E549FDD3B456E68AFDDDBFC6 /* PipSqueak */ = {
+		E8E63E82B4D70E50A7D7A7DF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2B52CD4BE2420F309445FD97 /* Info.plist */,
-				A1160FDC89EB534F90BF9282 /* PipSqueak.entitlements */,
-				6D021FE468EA1A6D719E8D9A /* PipSqueakApp.swift */,
-				E4656DBF3A21347ED3ECE882 /* Managers */,
-				3954F4638B9B1BD4D8B1D755 /* Models */,
-				91FD3F97FC5A82CCE127F0D8 /* Views */,
+				A3B01FA8747224A2BD41C90D /* MenuBarLabel.swift */,
+				8881E43219360DD6A6AE1529 /* NextMeetingCard.swift */,
+				6CB9D2D38AF848140DEE53EC /* PermissionDeniedView.swift */,
+				8C3DD6CC7294B4F4CA081BF0 /* PopoverView.swift */,
+				D1ED84AAC19543E65D6E18F5 /* RecentMeetingsList.swift */,
+				B3E580A7656C3B500C60E275 /* UpcomingMeetingsList.swift */,
+				D73BA9F7E19902A7BC0205E6 /* Settings */,
 			);
-			path = PipSqueak;
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FD4526D8604FD276C40E6410 /* PipSqueak */ = {
+		6EFBEE7DB7920E2139177353 /* PipSqueak */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D04A34AF364AC5DEC9550A87 /* Build configuration list for PBXNativeTarget "PipSqueak" */;
+			buildConfigurationList = ECA14738332E47A2ABA6289C /* Build configuration list for PBXNativeTarget "PipSqueak" */;
 			buildPhases = (
-				1A5E6F4BF9ACA01746FE13F1 /* Sources */,
-				3FFB326F6DEC68D35F136325 /* Resources */,
+				8FA736791813EE265A76D418 /* Sources */,
+				79BBBC2EC0B149F373DE0781 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -160,13 +163,13 @@
 			packageProductDependencies = (
 			);
 			productName = PipSqueak;
-			productReference = F89E8C630FE9CEB6941E4BC0 /* PipSqueak.app */;
+			productReference = CD1101ED57D6751280B0C3CA /* PipSqueak.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		E75E4F753B11ED1155136B63 /* Project object */ = {
+		DC78A650CF8B3BB62CBAEB37 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
@@ -174,67 +177,86 @@
 				TargetAttributes = {
 				};
 			};
-			buildConfigurationList = 5725F03E449673F243AB7D46 /* Build configuration list for PBXProject "PipSqueak" */;
+			buildConfigurationList = 5EC592A206E0BD3A36828CB3 /* Build configuration list for PBXProject "PipSqueak" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
 				en,
 			);
-			mainGroup = 244D7F79B879D94A7B9773B6;
+			mainGroup = AE3FB6E5C9CFAB9386138A19;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 37E886C57EE9C4FFBF431241 /* Products */;
+			productRefGroup = 79218A07CF5F8468E4F7708F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FD4526D8604FD276C40E6410 /* PipSqueak */,
+				6EFBEE7DB7920E2139177353 /* PipSqueak */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		3FFB326F6DEC68D35F136325 /* Resources */ = {
+		79BBBC2EC0B149F373DE0781 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5450E668241A23486344F1B6 /* 30second.mp3 in Resources */,
+				EE6624BFED6A0A8B81ED74B3 /* 30second.mp3 in Resources */,
+				014EB684D5A2BC38FD818162 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		1A5E6F4BF9ACA01746FE13F1 /* Sources */ = {
+		8FA736791813EE265A76D418 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75560D7C4535BC72870338A4 /* AppState.swift in Sources */,
-				698FDFAE1B4B0D9D45210BA5 /* AudioManager.swift in Sources */,
-				D9E08DEA2077103E1AD5E1AD /* AudioSettingsView.swift in Sources */,
-				0C4CB7728155351E2762DC33 /* BrowserProfileManager.swift in Sources */,
-				1A41045D58F481A50104B759 /* CalendarManager.swift in Sources */,
-				77FDBCB4FD25402E5FE42B79 /* CalendarSettingsView.swift in Sources */,
-				3E7DDE849BAF938C2446EA51 /* CountdownManager.swift in Sources */,
-				72B498BA4FC41D10AD56389D /* GeneralSettingsView.swift in Sources */,
-				82CE4B3AC51867CCBAD08D6A /* PipSqueakApp.swift in Sources */,
-				C5DC1BF7300996EEF2F7DE2F /* MeetingEvent.swift in Sources */,
-				0554EF8B8A25BDB16B224C38 /* MenuBarLabel.swift in Sources */,
-				5804977A99219FBB0E7C8EB7 /* NextMeetingCard.swift in Sources */,
-				07C8C9E022A95E1E8A493F8D /* PermissionDeniedView.swift in Sources */,
-				520DE89D88E68137C2415925 /* PopoverView.swift in Sources */,
-				C14565DA4325D852CC8F3A6C /* ProfileMappingSettingsView.swift in Sources */,
-				5E0E1D0F01DF18F10BAC7D62 /* RecentMeetingsList.swift in Sources */,
-				84C4B6816F651D50147CFCEF /* SettingsView.swift in Sources */,
-				0A80EACF691BAECE9D506191 /* TimerSettingsView.swift in Sources */,
-				2E3266538587838FB0F66108 /* UpcomingMeetingsList.swift in Sources */,
+				8BC0480861CF5FA173A0BD49 /* AppState.swift in Sources */,
+				5563149DF16348C2BD22B8E0 /* AudioManager.swift in Sources */,
+				5885978570027113A1F969C8 /* AudioSettingsView.swift in Sources */,
+				1938E5E7CAFC7EFC7CE85560 /* BrowserProfileManager.swift in Sources */,
+				ACC4C26BFB5D9FB2FE0ABF93 /* CalendarManager.swift in Sources */,
+				985EB87685966C558CC993B5 /* CalendarSettingsView.swift in Sources */,
+				C942D8D2469A75A4CFFAC75F /* CountdownManager.swift in Sources */,
+				818F724CB626D2A035A36136 /* GeneralSettingsView.swift in Sources */,
+				465852B1E9554282C500FD70 /* MeetingEvent.swift in Sources */,
+				53685D7F85259631DD82EB7A /* MenuBarLabel.swift in Sources */,
+				80FFC66C08F6C180F83BE65B /* NextMeetingCard.swift in Sources */,
+				F0BDDC12310A7A0F6F1713F5 /* PermissionDeniedView.swift in Sources */,
+				644CC7C02BA12D48002CAE57 /* PipSqueakApp.swift in Sources */,
+				332A21ED14F0AA438B23E331 /* PopoverView.swift in Sources */,
+				43836535C7AA79A40A9B7671 /* ProfileMappingSettingsView.swift in Sources */,
+				A0F6977DC6273C8D09ADA8BF /* RecentMeetingsList.swift in Sources */,
+				0C8078FCE434D5D4E890B762 /* SettingsView.swift in Sources */,
+				96704CEB6BC9DD61828314B9 /* TimerSettingsView.swift in Sources */,
+				67B09083C7BD34A2BFCE86E7 /* UpcomingMeetingsList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		5E33CA42C9BC7BAC97FB163C /* Debug */ = {
+		0BA4B0DE22C6EB6FCD2EF47C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PipSqueak/PipSqueak.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PipSqueak/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ca.zakr.PipSqueak;
+				PRODUCT_NAME = PipSqueak;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5EED70CA39D4098257BB9F3F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -299,25 +321,7 @@
 			};
 			name = Debug;
 		};
-		78AAA3B3F9806599A43FD41E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = PipSqueak/PipSqueak.entitlements;
-				COMBINE_HIDPI_IMAGES = YES;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = PipSqueak/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = ca.zakr.PipSqueak;
-				PRODUCT_NAME = PipSqueak;
-				SDKROOT = macosx;
-			};
-			name = Release;
-		};
-		DDA22762FE688D7E07414FEA /* Release */ = {
+		7E2CD70222196AD0D9307D6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -375,7 +379,7 @@
 			};
 			name = Release;
 		};
-		F9BBD876B83F5474C7DDE708 /* Debug */ = {
+		E7FDECFA0211AF50488D45F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -391,30 +395,30 @@
 				PRODUCT_NAME = PipSqueak;
 				SDKROOT = macosx;
 			};
-			name = Debug;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5725F03E449673F243AB7D46 /* Build configuration list for PBXProject "PipSqueak" */ = {
+		5EC592A206E0BD3A36828CB3 /* Build configuration list for PBXProject "PipSqueak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5E33CA42C9BC7BAC97FB163C /* Debug */,
-				DDA22762FE688D7E07414FEA /* Release */,
+				5EED70CA39D4098257BB9F3F /* Debug */,
+				7E2CD70222196AD0D9307D6C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		D04A34AF364AC5DEC9550A87 /* Build configuration list for PBXNativeTarget "PipSqueak" */ = {
+		ECA14738332E47A2ABA6289C /* Build configuration list for PBXNativeTarget "PipSqueak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F9BBD876B83F5474C7DDE708 /* Debug */,
-				78AAA3B3F9806599A43FD41E /* Release */,
+				0BA4B0DE22C6EB6FCD2EF47C /* Debug */,
+				E7FDECFA0211AF50488D45F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = E75E4F753B11ED1155136B63 /* Project object */;
+	rootObject = DC78A650CF8B3BB62CBAEB37 /* Project object */;
 }

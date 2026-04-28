@@ -25,6 +25,12 @@ targets:
         type: resource
     info:
       path: PipSqueak/Info.plist
+      properties:
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        LSUIElement: true
+        NSCalendarsUsageDescription: PipSqueak needs access to your calendars to show countdown timers before your meetings.
+        NSCalendarsFullAccessUsageDescription: PipSqueak needs access to your calendars to show countdown timers before your meetings.
     entitlements:
       path: PipSqueak/PipSqueak.entitlements
     settings:
