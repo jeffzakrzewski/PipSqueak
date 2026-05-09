@@ -2,7 +2,7 @@
 
 A tiny macOS menu bar app that nudges you into your next meeting.
 
-**Latest release: 1.0.0**
+**Latest release: 1.0.1**
 
 PipSqueak watches your Calendar, counts down the time until your next meeting in the menu bar, and plays a gentle audio cue a few seconds before it starts so you actually show up on time.
 

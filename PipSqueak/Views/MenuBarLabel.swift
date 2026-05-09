@@ -6,6 +6,7 @@ struct MenuBarLabel: View {
     @State private var flashOn = false
     @State private var justStartedMeeting = false
     @State private var pendingFlashWork: [DispatchWorkItem] = []
+    @State private var justStartedClearWork: DispatchWorkItem?
 
     private var remaining: Int {
         appState.countdownManager.remainingSeconds
@@ -49,12 +50,23 @@ struct MenuBarLabel: View {
                     flashOn = false
                     justStartedMeeting = true
                     updateStatusItemBackground(color: .systemGreen)
+                    justStartedClearWork?.cancel()
                     let work = DispatchWorkItem {
                         justStartedMeeting = false
                         updateStatusItemBackground(color: nil)
+                        justStartedClearWork = nil
                     }
-                    pendingFlashWork.append(work)
+                    justStartedClearWork = work
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: work)
+                }
+            } else {
+                // Meeting ended or any other transition out of inMeeting:
+                // make sure the green "just started" highlight doesn't get stuck.
+                justStartedClearWork?.cancel()
+                justStartedClearWork = nil
+                if justStartedMeeting {
+                    justStartedMeeting = false
+                    updateStatusItemBackground(color: nil)
                 }
             }
         }
